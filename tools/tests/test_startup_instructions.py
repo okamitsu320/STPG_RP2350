@@ -21,6 +21,9 @@ def test_source_quick_start_is_explicit_and_device_free(page):
     assert "python -m venv stpg-env" in windows
     assert ".\\stpg-env\\Scripts\\python.exe -m pip install ." in windows
     assert "./stpg-env/bin/python -m pip install ." in posix
+    assert "**New runner project**" in text
+    assert "`samples/gui_tiny-project/results/`" in text
+    assert "macOS is untested" in text
     for commands, python in [(windows, ".\\stpg-env\\Scripts\\python.exe"),
                              (posix, "./stpg-env/bin/python")]:
         assert f"{python} -m stpgview.physical.patterns samples" in commands

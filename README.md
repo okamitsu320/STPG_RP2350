@@ -10,7 +10,7 @@ accessory results are separate: none alone certifies a device under test.
 ## First run: a simulated tutorial
 
 This walks you through the GUI once, from a sample pattern to a run result, against a **simulated** STPG. No board,
-firmware or SDK is needed, and nothing touches hardware: the GUI starts with real-device runs switched off. It is a
+firmware or Pico SDK is needed, and nothing touches hardware: the GUI starts with real-device runs switched off. It is a
 tutorial, not a hardware test.
 
 ### 1. Install and start
@@ -28,7 +28,7 @@ python -m venv stpg-env
 .\stpg-env\Scripts\python.exe -m stpgview --demo-device --no-device-run --config-dir ./settings-check --results-dir ./runs-check
 ```
 
-Linux / macOS:
+Linux (also the command form for macOS; macOS is untested and not actively supported):
 
 ```sh
 python3 -m venv stpg-env
@@ -48,7 +48,8 @@ Stop it later with Ctrl+C in that terminal.
 
 ### 3. Build it
 
-1. Press **Build in Runner…**. The **New project** dialog opens, filled in from the open file.
+1. Press **Build in Runner…**. The **New runner project** dialog opens, filled in from the open file. Use a new
+   project folder if the suggested one already contains a project or other files.
 2. Choose **Wait preset** `none` and **Completion** `hold`; leave the rest. Press **Create**.
 3. Press **Build**. Each stage gets a check mark, and the bundle card shows the built package.
 
@@ -57,7 +58,8 @@ Stop it later with Ctrl+C in that terminal.
 1. In **3 · Run** choose the device **simulated (demo, no hardware)**.
 2. Press **Run…**. The confirmation lists exactly what will run. Tick every statement and press **Start run**.
 3. The result shows **Outcome** `COMPLETED` and **Comparison** `NOT_APPLICABLE` (this sample has no compares), a
-   **SIMULATED — no hardware** badge, and the folder with the result files under `runs-check`.
+   **SIMULATED — no hardware** badge, and the result folder inside the project. With the suggested project name,
+   look under `samples/gui_tiny-project/results/`. The `runs-check` folder is for runs outside a project.
 
 That is the whole loop. The [getting-started guide](manual/getting-started.md) explains each screen in more detail.
 

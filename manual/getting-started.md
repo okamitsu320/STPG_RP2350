@@ -6,6 +6,8 @@ disabled. No public Release or package-index entry is assumed.
 ## 1. Install
 
 You need Python 3.10 or later and a current browser (Chrome, Edge or Firefox).
+macOS is untested and not actively supported. The shell commands are provided
+as a starting point for anyone who wants to try it.
 
 Extract the source download and open a terminal in the folder containing `pyproject.toml`. Internet access may be
 needed for Python build dependencies and pyserial. The STPG package itself is installed from this folder, not
@@ -86,7 +88,7 @@ waveform. Local path fields and the page header are omitted from the panel scree
 
 ## 5. Build it
 
-1. Press **Build in Runner…**. The Runner opens the **New project** dialog, filled in from the open file. Choose a new
+1. Press **Build in Runner…**. The Runner opens the **New runner project** dialog, filled in from the open file. Choose a new
    project folder; do not select a folder containing another project or other files.
 2. Choose **Wait preset** `none` and **Completion** `hold`. Leave the other settings as they are.
 3. Press **Create**, then **Build**.
@@ -99,8 +101,9 @@ The build reports each stage. **Verify** checks the result and **Plan** shows wh
 2. Press **Run…**. A confirmation lists exactly what will run.
 3. Tick every statement and press **Start run**.
 
-The result shows **Outcome** and **Comparison** separately, and the folder of the result files. The word SIMULATED
-must be present: this confirms the walkthrough did not exercise real hardware.
+The result shows **Outcome** and **Comparison** separately, and the folder of the result files. A project stores
+its runs in its own `results/` directory, for example `samples/gui_tiny-project/results/` with the suggested name.
+The word SIMULATED must be present: this confirms the walkthrough did not exercise real hardware.
 
 ![Completed simulated run, with acquisition and comparison reported separately](images/run-simulated.png)
 

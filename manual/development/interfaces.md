@@ -16,7 +16,7 @@ To build the core wheel yourself, from the core source folder on Windows:
 .\stpg-env\Scripts\python.exe -m pip install --force-reinstall ./packages/stpg_rp2350-0.1.0.dev7-py3-none-any.whl
 ```
 
-These are filenames for this core candidate, not placeholders. On Linux/macOS
+These are filenames for this version, not placeholders. On Linux/macOS
 use `./stpg-env/bin/python` instead of the Windows interpreter path. For an
 offline core install, prepare `wheelhouse/` with the runtime dependencies
 (at least pyserial 3.5), then use:
@@ -41,12 +41,12 @@ exactly `stpg-rp2350` 0.1.0.dev7. An older LA wheel (0.1.0.dev3) requires the ol
 pip would replace this core with the old one. Do not use `--no-deps` to bypass the pin, and do not fetch either
 distribution by name from a public index. The core works without LA.
 
-Close both programs before updating, then restart them. These preparation
-candidates can keep the same version while GUI bytes change: without
+Close both programs before updating, then restart them. Development builds
+can keep the same version number while GUI files change: without
 `--force-reinstall`, pip can skip an already installed version. A new virtual
 environment is another option. The SDK fingerprint alone does not identify a
-GUI revision. This SDK update changes the bundle fingerprint: old bundles need
-an explicit verified [rebind or rebuild](results.md), not a hand-edited manifest.
+GUI revision. If the SDK fingerprint changes, old bundles need an explicit
+verified [rebind or rebuild](results.md), not a hand-edited manifest.
 Re-export accessory configs to a new folder after an environment update.
 
 ## Commands and API
