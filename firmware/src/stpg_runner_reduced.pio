@@ -1,0 +1,13 @@
+.program stpg_runner_reduced
+.wrap_target
+    pull block
+    mov x, osr
+public wait_loop:
+    jmp x-- wait_loop
+    wait 0 irq 4
+    pull block
+    out pins, 16
+    pull block
+    out pindirs, 16
+    irq nowait 4
+.wrap

@@ -1,0 +1,201 @@
+#ifndef STPG_COMMON_H
+#define STPG_COMMON_H
+
+#include <stdint.h>
+
+#define STPG_PATTERN_MAGIC   0x47465453u
+#define STPG_RATEVEC_MAGIC   0x56525453u
+#define STPG_MACROVEC_MAGIC  0x4D565453u
+#define STPG_MACROP2VEC_MAGIC 0x32565453u
+#define STPG_CMD_MAGIC       0x43475053u
+#define STPG_PROTO_VERSION   2u
+#define STPG_PATTERN_VERSION 1u
+#define STPG_PATTERN_VERSION_WIDE_WAIT 2u
+
+#define STPG_EXEC_EVENT_SIZE 20u
+#define STPG_EXEC_EVENT32_SIZE 24u
+#define STPG_HEADER_SIZE     40u
+#define STPG_RATEVEC_HEADER_SIZE 64u
+#define STPG_MACROVEC_HEADER_SIZE 40u
+#define STPG_RATE_DESC_SIZE      8u
+#define STPG_RATE_SLOT_SIZE      16u
+#define STPG_RATE_DESC32_SIZE    12u
+#define STPG_RATE_SLOT32_SIZE    20u
+#define STPG_VECTOR_RECORD_SIZE  20u
+#define STPG_MACRO_RECORD_SIZE   20u
+#define STPG_MACRO_P2_RECORD_SIZE 34u
+#define STPG_LOOP_BLOCK_HEADER_SIZE 8u
+#define STPG_CMD_SIZE        32u
+#define STPG_RSP_SIZE        64u
+
+#define STPG_MAX_PATTERN_PINS 24u
+#define STPG_ACTIVE_PINS_V01  16u
+#define STPG_ACTIVE_PINS_V11  24u
+#define STPG_MAX_PATTERN_BYTES (128u * 1024u)
+#define STPG_MAX_EVENT_COUNT   6551u
+#ifndef STPG_SAMPLE_PSRAM_SRAM_STAGING
+/* Standard PSRAM samples use the SRAM RX ring. SRAM-only/fail-stop and
+ * reduced diagnostic builds retain their existing destinations. */
+#if defined(STPG_STREAM_PSRAM_COMPARE_SAMPLE) && STPG_STREAM_PSRAM_COMPARE_SAMPLE \
+    && (!defined(STPG_STREAM_FAIL_STOP) || !STPG_STREAM_FAIL_STOP) \
+    && (!defined(STPG_STREAM_COMPARE_SAMPLE_REPAIR) || !STPG_STREAM_COMPARE_SAMPLE_REPAIR)
+#define STPG_SAMPLE_PSRAM_SRAM_STAGING 1
+#else
+#define STPG_SAMPLE_PSRAM_SRAM_STAGING 0
+#endif
+#endif
+#ifndef STPG_MAX_RATES
+#define STPG_MAX_RATES         64u
+#endif
+#define STPG_MAX_SLOTS_PER_RATE 8u
+#define STPG_UPLOAD_CHUNK_SIZE 4096u
+#define STPG_MAX_WAIT_TICKS    65535u
+#define STPG_MAX_WAIT_TICKS_32 0xFFFFFFFFu
+#define STPG_T_MIN_TICKS       6u
+
+#define STPG_EVF_SAMPLE_POINT (1u << 3)
+#define STPG_EVF_COMPARE_POINT (1u << 4)
+
+#define STPG_FAIL_LOG_MAX 341u
+
+#define STPG_PSRAM_SLOT_MAGIC      0x534C5350u
+#define STPG_FLASH_SLOT_MAGIC      0x534C4653u
+#define STPG_BOOT_CONFIG_MAGIC     0x46434253u
+#define STPG_PSRAM_TOTAL_BYTES     (8u * 1024u * 1024u)
+#define STPG_PSRAM_META_BASE       0x000000u
+#define STPG_PSRAM_META_BYTES      0x010000u
+#ifndef STPG_PSRAM_PATTERN_BASE
+#define STPG_PSRAM_PATTERN_BASE    0x010000u
+#endif
+#ifndef STPG_PSRAM_PATTERN_BYTES
+#define STPG_PSRAM_PATTERN_BYTES   0x4F0000u
+#endif
+#ifndef STPG_PSRAM_RESULT_BASE
+#define STPG_PSRAM_RESULT_BASE     0x500000u
+#endif
+#ifndef STPG_PSRAM_RESULT_BYTES
+#define STPG_PSRAM_RESULT_BYTES    0x200000u
+#endif
+#ifndef STPG_PSRAM_STAGING_BASE
+#define STPG_PSRAM_STAGING_BASE    0x700000u
+#endif
+#ifndef STPG_PSRAM_STAGING_BYTES
+#define STPG_PSRAM_STAGING_BYTES   0x100000u
+#endif
+
+/*
+ * Firmware identity is generated from the build contract. Version 4.2
+ * reserves the patch byte as: bit 7 = diagnostic flavor, bits 0..6 = PSRAM
+ * layout (0=legacy 6M/1M result, 1=5M/2M result, 0x7f=other/custom).
+ * The build byte is STPG_MAX_RATES. This makes the values most likely to be
+ * confused at runtime visible through the existing INFO/STATUS response.
+ */
+#ifndef STPG_FW_DIAGNOSTIC
+#define STPG_FW_DIAGNOSTIC 0u
+#endif
+#if STPG_FW_DIAGNOSTIC != 0 && STPG_FW_DIAGNOSTIC != 1
+#error "STPG_FW_DIAGNOSTIC must be 0 or 1"
+#endif
+#if (STPG_PSRAM_PATTERN_BASE == 0x010000u) && \
+    (STPG_PSRAM_PATTERN_BYTES == 0x4F0000u) && \
+    (STPG_PSRAM_RESULT_BASE == 0x500000u) && \
+    (STPG_PSRAM_RESULT_BYTES == 0x200000u) && \
+    (STPG_PSRAM_STAGING_BASE == 0x700000u) && \
+    (STPG_PSRAM_STAGING_BYTES == 0x100000u)
+#define STPG_FW_LAYOUT_CODE 1u
+#elif (STPG_PSRAM_PATTERN_BASE == 0x010000u) && \
+      (STPG_PSRAM_PATTERN_BYTES == 0x5F0000u) && \
+      (STPG_PSRAM_RESULT_BASE == 0x600000u) && \
+      (STPG_PSRAM_RESULT_BYTES == 0x100000u) && \
+      (STPG_PSRAM_STAGING_BASE == 0x700000u) && \
+      (STPG_PSRAM_STAGING_BYTES == 0x100000u)
+#define STPG_FW_LAYOUT_CODE 0u
+#else
+#define STPG_FW_LAYOUT_CODE 0x7Fu
+#endif
+#define STPG_FW_VERSION_MAJOR 4u
+#define STPG_FW_VERSION_MINOR 2u
+#define STPG_FW_VERSION_PATCH (STPG_FW_LAYOUT_CODE | (STPG_FW_DIAGNOSTIC << 7))
+#define STPG_FW_VERSION_BUILD (STPG_MAX_RATES & 0xFFu)
+#define STPG_FW_VERSION (STPG_FW_VERSION_MAJOR | \
+                         (STPG_FW_VERSION_MINOR << 8) | \
+                         (STPG_FW_VERSION_PATCH << 16) | \
+                         (STPG_FW_VERSION_BUILD << 24))
+
+#if STPG_PSRAM_PATTERN_BASE != (STPG_PSRAM_META_BASE + STPG_PSRAM_META_BYTES)
+#error "PSRAM pattern region must follow the reserved metadata region"
+#endif
+#if (STPG_PSRAM_PATTERN_BASE + STPG_PSRAM_PATTERN_BYTES) != STPG_PSRAM_RESULT_BASE
+#error "PSRAM pattern and result regions must be contiguous"
+#endif
+#if (STPG_PSRAM_RESULT_BASE + STPG_PSRAM_RESULT_BYTES) != STPG_PSRAM_STAGING_BASE
+#error "PSRAM result and staging regions must be contiguous"
+#endif
+#if (STPG_PSRAM_STAGING_BASE + STPG_PSRAM_STAGING_BYTES) > STPG_PSRAM_TOTAL_BYTES
+#error "PSRAM partition exceeds the declared PSRAM capacity"
+#endif
+#ifndef STPG_STREAM_BUFFER_EVENTS
+#define STPG_STREAM_BUFFER_EVENTS  2048u
+#endif
+#ifndef STPG_STREAM_SLOT_COUNT
+#define STPG_STREAM_SLOT_COUNT 3u
+#endif
+#define STPG_STREAM_VECTOR_CACHE_RECORDS  2048u
+#ifndef STPG_STREAM_PRECOMPUTED_UOP_CAPACITY
+#define STPG_STREAM_PRECOMPUTED_UOP_CAPACITY 32u
+#endif
+#ifndef STPG_STREAM_RATE_TEMPLATE_FILL
+/* Experimental opt-in until the separately authorized physical A/B trial. */
+#define STPG_STREAM_RATE_TEMPLATE_FILL 0
+#endif
+#ifndef STPG_STREAM_VECTOR_CACHE_NEXT_RECORDS
+#define STPG_STREAM_VECTOR_CACHE_NEXT_RECORDS STPG_STREAM_VECTOR_CACHE_RECORDS
+#endif
+#ifndef STPG_STREAM_VECTOR_CACHE_READ_RECORDS
+#define STPG_STREAM_VECTOR_CACHE_READ_RECORDS STPG_STREAM_VECTOR_CACHE_RECORDS
+#endif
+#if STPG_STREAM_VECTOR_CACHE_READ_RECORDS < 1u || \
+    STPG_STREAM_VECTOR_CACHE_READ_RECORDS > STPG_STREAM_VECTOR_CACHE_RECORDS
+#error "STPG_STREAM_VECTOR_CACHE_READ_RECORDS must fit within the active vector cache"
+#endif
+#define STPG_MAX_LOOP_BLOCKS       128u
+#define STPG_FLASH_SLOT_META_VERSION 1u
+#define STPG_FLASH_SLOT_META_BYTES    4096u
+#define STPG_BOOT_CONFIG_VERSION      1u
+#define STPG_BOOT_CONFIG_BYTES        4096u
+#define STPG_BOOT_SLOT_DISABLED       0xFFFFFFFFu
+
+typedef enum {
+    STPG_PATTERN_FORMAT_RAW_EVENT = 0,
+    STPG_PATTERN_FORMAT_RATE_VECTOR = 1,
+    STPG_PATTERN_FORMAT_MACRO_STREAM = 2,
+    STPG_PATTERN_FORMAT_MACRO_P2 = 3,
+} stpg_pattern_format_t;
+
+typedef enum {
+    STPG_DRIVE_NONE = 0,
+    STPG_DRIVE_VECTOR = 1,
+    STPG_DRIVE_ZERO = 2,
+    STPG_DRIVE_ONE = 3,
+    STPG_DRIVE_COMPLEMENT = 4,
+} stpg_drive_op_t;
+
+#define STPG_RATE_SLOT_DRIVE_OP_MASK   0x0007u
+#define STPG_RATE_SLOT_DIR_UPDATE      0x0008u
+#define STPG_RATE_SLOT_SAMPLE          0x0010u
+#define STPG_RATE_SLOT_STROBE_MARK     0x0020u
+#define STPG_RATE_SLOT_VALID_FLAG_MASK 0x003Fu
+
+#define STPG_RATEVEC_FLAG_HAS_LOOP             0x00000001u
+#define STPG_RATEVEC_FLAG_EXPLICIT_WAIT_P4     0x00000002u
+#define STPG_VECTOR_FLAG_LOOP_REF               0x01u
+#define STPG_VECTOR_FLAG_EXPLICIT_WAIT_P4_END   0x02u
+#define STPG_VECTOR_VALID_FLAG_MASK             0x03u
+
+typedef enum {
+    STPG_STORAGE_SRAM = 0,
+    STPG_STORAGE_PSRAM = 1,
+    STPG_STORAGE_FLASH = 2,
+} stpg_storage_t;
+
+#endif

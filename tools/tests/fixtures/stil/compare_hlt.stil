@@ -1,0 +1,22 @@
+Header { Title "compare-hlt"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+}
+SignalGroups {
+  ALL = 'D0 + D1';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '40ns';
+    Waveforms {
+      D0 { H: 20ns Compare(1); L: 20ns Compare(0); T: 20ns Compare(X); }
+      D1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = H1; }
+  V { ALL = L0; }
+}

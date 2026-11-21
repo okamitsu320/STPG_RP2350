@@ -1,0 +1,24 @@
+Header { Title "multi-wft"; }
+Signals {
+  CLK InOut;
+}
+Timing {
+  WaveformTable WFT_SLOW {
+    Period '80ns';
+    Waveforms {
+      CLK { 0: 0ns Drive(0); 1: 0ns Drive(1); P: 0ns Drive(0), 40ns Drive(1); N: 0ns Drive(1), 40ns Drive(0); }
+    }
+  }
+  WaveformTable WFT_FAST {
+    Period '40ns';
+    Waveforms {
+      CLK { 0: 0ns Drive(0); 1: 0ns Drive(1); P: 0ns Drive(0), 20ns Drive(1); N: 0ns Drive(1), 20ns Drive(0); }
+    }
+  }
+}
+Pattern MAIN {
+  W WFT_SLOW;
+  V { CLK = P; }
+  W WFT_FAST;
+  V { CLK = N; }
+}

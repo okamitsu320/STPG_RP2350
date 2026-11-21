@@ -1,0 +1,16 @@
+.program stpg_runner
+.wrap_target
+    pull block
+    mov x, osr
+public wait_loop:
+    jmp x-- wait_loop
+    pull block
+    mov y, osr
+    jmp !y skip_sample
+    irq nowait 4
+skip_sample:
+    pull block
+    out pins, 16
+    pull block
+    out pindirs, 16
+.wrap

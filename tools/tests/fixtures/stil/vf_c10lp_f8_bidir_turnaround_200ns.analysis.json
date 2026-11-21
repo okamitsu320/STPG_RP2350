@@ -1,0 +1,794 @@
+{
+  "kind": "stpg_stil_source_analysis",
+  "analysis_version": "v2",
+  "status": "REJECT",
+  "decision": {
+    "status": "REJECT",
+    "physical_execution_authorized": false,
+    "generation_ready": false,
+    "error_count": 1,
+    "warning_count": 0,
+    "blocking_codes": [
+      "ERR_REQUESTED_BACKEND_UNAVAILABLE"
+    ],
+    "review_codes": []
+  },
+  "input": {
+    "source": {
+      "path": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+      "size_bytes": 3627,
+      "sha256": "83f1961aeb3f0d220ac162c6647772840573aee8ee9b0488a970b4b499b74203"
+    },
+    "pin_map": {
+      "path": "tools/tests/fixtures/vcd/vf_c10lp_pinmap_24.json",
+      "size_bytes": 2258,
+      "sha256": "9cb1231858de9c6611b801d6519fd891255333c0e2a41ebd8c3d527eb3409074"
+    }
+  },
+  "selection": {
+    "pattern_burst": null,
+    "pattern": "F8_BIDIR_TURNAROUND",
+    "mode_requested": "rate-vector",
+    "mode_emitted": null,
+    "loop_policy": "expand",
+    "scope": "full_source",
+    "until_vector": null,
+    "vector_range": null,
+    "resolved_vector_count": 20,
+    "logical_vector_count": 20
+  },
+  "source_structure": {
+    "signals": [
+      {
+        "name": "clk",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 3,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "rst_n",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 4,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "mode_0",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 5,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "mode_1",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 6,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "mode_2",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 7,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "mode_3",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 8,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "ctrl_0",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 9,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "ctrl_1",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 10,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "ctrl_2",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 11,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_0",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 12,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_1",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 13,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_2",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 14,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_3",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 15,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_4",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 16,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_6",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 17,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_5",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 18,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_4",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 19,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_3",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 20,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_2",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 21,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_1",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 22,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "dout_0",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 23,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_7",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 24,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_6",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 25,
+          "column": 1,
+          "label": null
+        }
+      },
+      {
+        "name": "io_5",
+        "direction": "InOut",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 26,
+          "column": 1,
+          "label": null
+        }
+      }
+    ],
+    "signal_groups": [
+      {
+        "name": "ALL",
+        "signals": [
+          "clk",
+          "rst_n",
+          "mode_0",
+          "mode_1",
+          "mode_2",
+          "mode_3",
+          "ctrl_0",
+          "ctrl_1",
+          "ctrl_2",
+          "io_0",
+          "io_1",
+          "io_2",
+          "io_3",
+          "io_4",
+          "dout_6",
+          "dout_5",
+          "dout_4",
+          "dout_3",
+          "dout_2",
+          "dout_1",
+          "dout_0",
+          "io_7",
+          "io_6",
+          "io_5"
+        ],
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 29,
+          "column": 1,
+          "label": null
+        }
+      }
+    ],
+    "waveform_tables": [
+      {
+        "name": "WFT1",
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 32,
+          "column": 1,
+          "label": null
+        },
+        "period_text": "200ns",
+        "period_ticks": 30,
+        "period_ns": "200.0",
+        "waveform_count": 24,
+        "characters": {
+          "0": 17,
+          "1": 17,
+          "Z": 8,
+          "H": 15,
+          "L": 15,
+          "T": 15
+        },
+        "minimum_gap_ticks": 30,
+        "minimum_gap_ns": "200",
+        "out_of_range_events": 0,
+        "non_monotonic_event_lists": 0,
+        "same_time_event_lists": 0
+      }
+    ],
+    "pattern_bursts": [],
+    "patterns": [
+      {
+        "name": "F8_BIDIR_TURNAROUND",
+        "vector_count": 20,
+        "source_vector_count": 20,
+        "logical_vector_count": 20,
+        "loop_count": 0,
+        "loop_preserved": false,
+        "location": {
+          "source_file": "tools/tests/fixtures/stil/vf_c10lp_f8_bidir_turnaround_200ns.stil",
+          "line": 62,
+          "column": 1,
+          "label": null
+        }
+      }
+    ]
+  },
+  "vectors": {
+    "vector_count": 20,
+    "source_vector_count": 20,
+    "logical_vector_count": 20,
+    "loop_preserved": false,
+    "event_group_count": 24,
+    "target_signal_use_histogram": {
+      "clk": 20,
+      "ctrl_0": 20,
+      "ctrl_1": 20,
+      "ctrl_2": 20,
+      "dout_0": 20,
+      "dout_1": 20,
+      "dout_2": 20,
+      "dout_3": 20,
+      "dout_4": 20,
+      "dout_5": 20,
+      "dout_6": 20,
+      "io_0": 20,
+      "io_1": 20,
+      "io_2": 20,
+      "io_3": 20,
+      "io_4": 20,
+      "io_5": 20,
+      "io_6": 20,
+      "io_7": 20,
+      "mode_0": 20,
+      "mode_1": 20,
+      "mode_2": 20,
+      "mode_3": 20,
+      "rst_n": 20
+    },
+    "waveform_table_histogram": {
+      "WFT1": 20
+    },
+    "character_histogram": {
+      "0": 174,
+      "1": 94,
+      "H": 17,
+      "L": 27,
+      "T": 144,
+      "Z": 24
+    },
+    "drive_vector_count": 20,
+    "compare_vector_count": 4,
+    "tri_state_vector_count": 3,
+    "no_effective_event_vector_count": 0,
+    "normalized_transition_count": 0,
+    "waveform_table_transition_count": 0,
+    "waveform_table_transition_examples": []
+  },
+  "timing": {
+    "tick_hz": 150000000,
+    "time_scale": "1.0",
+    "source_vector_count": 20,
+    "logical_vector_count": 20,
+    "loop_preserved": false,
+    "period_ticks_by_waveform_table": {
+      "WFT1": 30
+    },
+    "vector_use_by_waveform_table": {
+      "WFT1": 20
+    },
+    "approximation_required": false,
+    "approximation_count": 0,
+    "approximation_reasons": []
+  },
+  "runtime_capacity": {
+    "name": "psram-compare-sample-streaming-practical",
+    "psram_pattern_bytes": 5177344,
+    "psram_pattern_base": 65536,
+    "psram_result_base": 5242880,
+    "psram_result_bytes": 2097152,
+    "psram_staging_base": 7340032,
+    "psram_staging_bytes": 1048576,
+    "direct_pattern_bytes": 131072,
+    "full_expansion_event_limit": 6551,
+    "streaming_event_limit": 4294967295,
+    "streaming_sample_limit": 524288,
+    "streaming_compare_limit": 4294967295,
+    "streaming_compare_free_only": false,
+    "supported_stream_modes": [
+      "rate-vector"
+    ],
+    "required_capability": 1048576,
+    "fail_log_entry_limit": 341
+  },
+  "runtime_capacity_assessments": {},
+  "segmentation": {
+    "available": false,
+    "status": "NOT_APPLICABLE",
+    "physical_execution_authorized": false,
+    "recommended_segment_vector_count": 100000,
+    "reason": "no segmentable PSRAM pattern-region failure was detected"
+  },
+  "rate_vector_contract": {
+    "max_rate_count": 64
+  },
+  "capability": {
+    "active_pins": 24,
+    "mapped_signal_count": 24,
+    "max_assigned_bit": 23,
+    "micro_op_family_analysis": {
+      "summary": {
+        "total_vectors": 20,
+        "supported_vectors": 20,
+        "unsupported_vectors": 0,
+        "micro_op_candidate_ratio": 1.0,
+        "family_histogram": {
+          "M1_DRIVE_THEN_SAMPLE": 4,
+          "M3_DRIVE_ONLY": 16
+        },
+        "supported_families": [
+          "M1_DRIVE_THEN_SAMPLE",
+          "M2_SAMPLE_THEN_DRIVE",
+          "M3_DRIVE_ONLY",
+          "M4_SAMPLE_ONLY",
+          "M5_SIMULTANEOUS_SAMPLE_DRIVE"
+        ],
+        "optimization_scope": "canonical-micro-op-families-only",
+        "generic_rate_vector_fallback": true
+      },
+      "unsupported_examples": [],
+      "family_examples": {
+        "M1_DRIVE_THEN_SAMPLE": [
+          {
+            "family": "M1_DRIVE_THEN_SAMPLE",
+            "vector_index": 5,
+            "global_vector_index": 5,
+            "stil_line": 69,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [
+              15
+            ],
+            "drive_signal_count": 17,
+            "compare_signal_count": 7,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M1_DRIVE_THEN_SAMPLE",
+            "vector_index": 9,
+            "global_vector_index": 9,
+            "stil_line": 73,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [
+              15
+            ],
+            "drive_signal_count": 9,
+            "compare_signal_count": 15,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M1_DRIVE_THEN_SAMPLE",
+            "vector_index": 14,
+            "global_vector_index": 14,
+            "stil_line": 78,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [
+              15
+            ],
+            "drive_signal_count": 17,
+            "compare_signal_count": 7,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M1_DRIVE_THEN_SAMPLE",
+            "vector_index": 19,
+            "global_vector_index": 19,
+            "stil_line": 83,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [
+              15
+            ],
+            "drive_signal_count": 9,
+            "compare_signal_count": 15,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          }
+        ],
+        "M2_SAMPLE_THEN_DRIVE": [],
+        "M3_DRIVE_ONLY": [
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 0,
+            "global_vector_index": 0,
+            "stil_line": 64,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 17,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 1,
+            "global_vector_index": 1,
+            "stil_line": 65,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 17,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 2,
+            "global_vector_index": 2,
+            "stil_line": 66,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 17,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 3,
+            "global_vector_index": 3,
+            "stil_line": 67,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 17,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 4,
+            "global_vector_index": 4,
+            "stil_line": 68,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 17,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 6,
+            "global_vector_index": 6,
+            "stil_line": 70,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 17,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 7,
+            "global_vector_index": 7,
+            "stil_line": 71,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 9,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          },
+          {
+            "family": "M3_DRIVE_ONLY",
+            "vector_index": 8,
+            "global_vector_index": 8,
+            "stil_line": 72,
+            "label": null,
+            "pattern_name": "F8_BIDIR_TURNAROUND",
+            "waveform_table_name": "WFT1",
+            "drive_times": [
+              0
+            ],
+            "sample_times": [],
+            "drive_signal_count": 9,
+            "compare_signal_count": 0,
+            "reason": null,
+            "supported": true,
+            "optimization_eligible": true,
+            "rate_vector_generic_fallback": true
+          }
+        ],
+        "M4_SAMPLE_ONLY": [],
+        "M5_SIMULTANEOUS_SAMPLE_DRIVE": []
+      }
+    },
+    "backend_candidates": {
+      "raw-event": {
+        "mode": "raw-event",
+        "status": "unavailable",
+        "error_code": "ERR_UNSUPPORTED_DRIVE_ACTION",
+        "error": "Drive(Z) is unsupported; only Drive(0) and Drive(1) are valid"
+      },
+      "rate-vector": {
+        "mode": "rate-vector",
+        "status": "unavailable",
+        "error_code": "ERR_UNSUPPORTED_DRIVE_ACTION",
+        "error": "Drive(Z) is unsupported; only Drive(0) and Drive(1) are valid"
+      },
+      "macro-stream": {
+        "mode": "macro-stream",
+        "status": "unavailable",
+        "error_code": "ERR_UNSUPPORTED_DRIVE_ACTION",
+        "error": "Drive(Z) is unsupported; only Drive(0) and Drive(1) are valid"
+      }
+    }
+  },
+  "wait_planning_inputs": {
+    "resolved_vector_count": 20,
+    "logical_vector_count": 20,
+    "loop_preserved": false,
+    "emitted_event_group_count": 24,
+    "rate_transition_count": 0,
+    "rate_transition_examples": [],
+    "streaming_timing_gate": {
+      "status": "UNAVAILABLE",
+      "reason": "rate-vector backend candidate is unavailable"
+    },
+    "boundary_wait_decision": {
+      "status": "UNAVAILABLE",
+      "reason": "source timing cannot be mapped to a rate-vector boundary schedule"
+    },
+    "automatic_wait_insertion": false,
+    "wait_value_source": "none",
+    "service_time_is_measured": false
+  },
+  "normalization": {
+    "transition_count": 0,
+    "transition_summary": []
+  },
+  "anomalies": [
+    {
+      "severity": "error",
+      "code": "ERR_REQUESTED_BACKEND_UNAVAILABLE",
+      "message": "requested backend rate-vector is unavailable for this STIL input",
+      "line": null,
+      "column": null,
+      "context": {
+        "mode": "rate-vector",
+        "status": "unavailable",
+        "error_code": "ERR_UNSUPPORTED_DRIVE_ACTION",
+        "error": "Drive(Z) is unsupported; only Drive(0) and Drive(1) are valid"
+      }
+    }
+  ]
+}

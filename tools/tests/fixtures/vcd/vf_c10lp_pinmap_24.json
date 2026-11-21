@@ -1,0 +1,29 @@
+{
+  "active_pins": 24,
+  "signals": {
+    "clk": {"bit": 0, "logical_pin": "DUT0", "direction": "inout", "role": "signal"},
+    "rst_n": {"bit": 1, "logical_pin": "DUT1", "direction": "inout", "role": "signal"},
+    "mode_0": {"bit": 2, "logical_pin": "DUT2", "direction": "inout", "role": "signal"},
+    "mode_1": {"bit": 3, "logical_pin": "DUT3", "direction": "inout", "role": "signal"},
+    "mode_2": {"bit": 4, "logical_pin": "DUT4", "direction": "inout", "role": "signal"},
+    "mode_3": {"bit": 5, "logical_pin": "DUT5", "direction": "inout", "role": "signal"},
+    "ctrl_0": {"bit": 6, "logical_pin": "DUT6", "direction": "inout", "role": "signal"},
+    "ctrl_1": {"bit": 7, "logical_pin": "DUT7", "direction": "inout", "role": "signal"},
+    "ctrl_2": {"bit": 8, "logical_pin": "DUT8", "direction": "inout", "role": "signal"},
+    "io_0": {"bit": 9, "logical_pin": "DUT9", "direction": "inout", "role": "signal"},
+    "io_1": {"bit": 10, "logical_pin": "DUT10", "direction": "inout", "role": "signal"},
+    "io_2": {"bit": 11, "logical_pin": "DUT11", "direction": "inout", "role": "signal"},
+    "io_3": {"bit": 12, "logical_pin": "DUT12", "direction": "inout", "role": "signal"},
+    "io_4": {"bit": 13, "logical_pin": "DUT13", "direction": "inout", "role": "signal"},
+    "io_5": {"bit": 14, "logical_pin": "DUT14", "direction": "inout", "role": "signal"},
+    "io_6": {"bit": 15, "logical_pin": "DUT15", "direction": "inout", "role": "signal"},
+    "io_7": {"bit": 16, "logical_pin": "DUT16", "direction": "inout", "role": "signal"},
+    "dout_0": {"bit": 17, "logical_pin": "DUT17", "direction": "output", "role": "signal"},
+    "dout_1": {"bit": 18, "logical_pin": "DUT18", "direction": "output", "role": "signal"},
+    "dout_2": {"bit": 19, "logical_pin": "DUT19", "direction": "output", "role": "signal"},
+    "dout_3": {"bit": 20, "logical_pin": "DUT20", "direction": "output", "role": "signal"},
+    "dout_4": {"bit": 21, "logical_pin": "DUT21", "direction": "output", "role": "signal"},
+    "dout_5": {"bit": 22, "logical_pin": "DUT22", "direction": "output", "role": "signal"},
+    "dout_6": {"bit": 23, "logical_pin": "DUT23", "direction": "output", "role": "signal"}
+  }
+}

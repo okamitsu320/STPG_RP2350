@@ -1,0 +1,17 @@
+{
+  "schema": "stpg.tinyusb.build-lock.v2",
+  "pico_sdk_commit": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+  "tinyusb_commit": "86ad6e56c1700e85f1c5678607a762cfe3aa2f47",
+  "tinyusb_patch": "firmware/dependencies/tinyusb-rp2350-control-dpram-event-quantum.patch",
+  "tinyusb_patch_sha256": "6a1726a2e78e7501b4a6605bbe02477dd70cfaa29fb97200ed471028d14b9042",
+  "tinyusb_target_path": "src/portable/raspberrypi/rp2040/rp2040_usb.c",
+  "tinyusb_base_file_sha256": "99d3c85cfacff165dd952d192023416e6f763658d7c52d75fb8b77243e673c3b",
+  "tinyusb_patched_file_sha256": "ab00e523bea63e74fbc400589502cd1d5171afea9f7623dbed5b5e9b502fbac2",
+  "tinyusb_additional_files": [
+    {
+      "path": "src/device/usbd.c",
+      "base_sha256": "f15a6da11eca127b792bd04d3270e6ea3901b0a29c24f462d5687d63da1df6cb",
+      "patched_sha256": "32d88899b1117f28ba8d306b20ed2a6e5b4b37cf1417dc72359df52fb41f4d3c"
+    }
+  ]
+}

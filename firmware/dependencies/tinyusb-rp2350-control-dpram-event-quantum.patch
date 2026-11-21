@@ -1,0 +1,138 @@
+diff --git a/src/portable/raspberrypi/rp2040/rp2040_usb.c b/src/portable/raspberrypi/rp2040/rp2040_usb.c
+index 43f48da3..d42c41c5 100644
+--- a/src/portable/raspberrypi/rp2040/rp2040_usb.c
++++ b/src/portable/raspberrypi/rp2040/rp2040_usb.c
+@@ -55,8 +55,10 @@ TU_ATTR_ALWAYS_INLINE static inline bool is_host_mode(void) {
+ //--------------------------------------------------------------------+
+ // Provide own byte by byte memcpy as not all copies are aligned
+ static void unaligned_memcpy(void *dst, const void *src, size_t n) {
+-  uint8_t *dst_byte = (uint8_t*)dst;
+-  const uint8_t *src_byte = (const uint8_t*)src;
++  // RP2350 DPRAM must not receive compiler-generated unaligned word accesses.
++  // Volatile byte accesses prevent widening/vectorization of this loop.
++  volatile uint8_t *dst_byte = (volatile uint8_t*)dst;
++  const volatile uint8_t *src_byte = (const volatile uint8_t*)src;
+   while (n--) {
+     *dst_byte++ = *src_byte++;
+   }
+@@ -153,37 +155,40 @@ static uint32_t __tusb_irq_path_func(prepare_ep_buffer)(struct hw_endpoint* ep,
+ 
+ // Prepare buffer control register value
+ void __tusb_irq_path_func(hw_endpoint_start_next_buffer)(struct hw_endpoint* ep) {
+-  uint32_t ep_ctrl = *ep->endpoint_control;
+-
+   // always compute and start with buffer 0
+   uint32_t buf_ctrl = prepare_ep_buffer(ep, 0) | USB_BUF_CTRL_SEL;
+ 
+-  // For now: skip double buffered for OUT endpoint in Device mode, since
+-  // host could send < 64 bytes and cause short packet on buffer0
+-  // NOTE: this could happen to Host mode IN endpoint
+-  // Also, Host mode "interrupt" endpoint hardware is only single buffered,
+-  // NOTE2: Currently Host bulk is implemented using "interrupt" endpoint
+-  bool const is_host = is_host_mode();
+-  bool const force_single = (!is_host && !tu_edpt_dir(ep->ep_addr)) ||
+-                            (is_host && tu_edpt_number(ep->ep_addr) != 0);
+-
+-  if (ep->remaining_len && !force_single) {
+-    // Use buffer 1 (double buffered) if there is still data
+-    // TODO: Isochronous for buffer1 bit-field is different than CBI (control bulk, interrupt)
+-
+-    buf_ctrl |= prepare_ep_buffer(ep, 1);
++  // Device EP0 has no endpoint-control register. Keep it single-buffered;
++  // never read or write address zero, including multi-packet descriptors.
++  if (ep->endpoint_control != NULL) {
++    uint32_t ep_ctrl = *ep->endpoint_control;
++    // For now: skip double buffered for OUT endpoint in Device mode, since
++    // host could send < 64 bytes and cause short packet on buffer0
++    // NOTE: this could happen to Host mode IN endpoint
++    // Also, Host mode "interrupt" endpoint hardware is only single buffered,
++    // NOTE2: Currently Host bulk is implemented using "interrupt" endpoint
++    bool const is_host = is_host_mode();
++    bool const force_single = (!is_host && !tu_edpt_dir(ep->ep_addr)) ||
++                              (is_host && tu_edpt_number(ep->ep_addr) != 0);
++
++    if (ep->remaining_len && !force_single) {
++      // Use buffer 1 (double buffered) if there is still data
++      // TODO: Isochronous for buffer1 bit-field is different than CBI (control bulk, interrupt)
++
++      buf_ctrl |= prepare_ep_buffer(ep, 1);
++
++      // Set endpoint control double buffered bit if needed
++      ep_ctrl &= ~EP_CTRL_INTERRUPT_PER_BUFFER;
++      ep_ctrl |= EP_CTRL_DOUBLE_BUFFERED_BITS | EP_CTRL_INTERRUPT_PER_DOUBLE_BUFFER;
++    } else {
++      // Single buffered since 1 is enough
++      ep_ctrl &= ~(EP_CTRL_DOUBLE_BUFFERED_BITS | EP_CTRL_INTERRUPT_PER_DOUBLE_BUFFER);
++      ep_ctrl |= EP_CTRL_INTERRUPT_PER_BUFFER;
++    }
+ 
+-    // Set endpoint control double buffered bit if needed
+-    ep_ctrl &= ~EP_CTRL_INTERRUPT_PER_BUFFER;
+-    ep_ctrl |= EP_CTRL_DOUBLE_BUFFERED_BITS | EP_CTRL_INTERRUPT_PER_DOUBLE_BUFFER;
+-  } else {
+-    // Single buffered since 1 is enough
+-    ep_ctrl &= ~(EP_CTRL_DOUBLE_BUFFERED_BITS | EP_CTRL_INTERRUPT_PER_DOUBLE_BUFFER);
+-    ep_ctrl |= EP_CTRL_INTERRUPT_PER_BUFFER;
++    *ep->endpoint_control = ep_ctrl;
+   }
+ 
+-  *ep->endpoint_control = ep_ctrl;
+-
+   TU_LOG(3, "  Prepare BufCtrl: [0] = 0x%04x  [1] = 0x%04x\r\n", tu_u32_low16(buf_ctrl), tu_u32_high16(buf_ctrl));
+ 
+   // Finally, write to buffer_control which will trigger the transfer
+@@ -263,7 +268,8 @@ static void __tusb_irq_path_func(_hw_endpoint_xfer_sync)(struct hw_endpoint* ep)
+   uint16_t buf0_bytes = sync_ep_buffer(ep, 0);
+ 
+   // sync buffer 1 if double buffered
+-  if ((*ep->endpoint_control) & EP_CTRL_DOUBLE_BUFFERED_BITS) {
++  if (ep->endpoint_control != NULL &&
++      ((*ep->endpoint_control) & EP_CTRL_DOUBLE_BUFFERED_BITS)) {
+     if (buf0_bytes == ep->wMaxPacketSize) {
+       // sync buffer 1 if not short packet
+       sync_ep_buffer(ep, 1);
+@@ -304,5 +310,15 @@ bool __tusb_irq_path_func(hw_endpoint_xfer_continue)(struct hw_endpoint* ep) {
+ 
+   // Part way through a transfer
+   if (!ep->active) {
++    // A new control request can retire an EP0 transfer while the controller's
++    // completion bit for that transfer is still pending.  The caller clears
++    // that stale BUFF_STATUS bit before reaching here, so there is no transfer
++    // to continue or completion event to report.  Treat this EP0-only race as
++    // consumed instead of panicking in USBCTRL_IRQ.  Keep the existing panic
++    // for non-control endpoints, where an inactive completion is unexpected.
++    if (tu_edpt_number(ep->ep_addr) == 0u) {
++      hw_endpoint_lock_update(ep, -1);
++      return false;
++    }
+     panic("Can't continue xfer on inactive ep %02X", ep->ep_addr);
+   }
+diff --git a/src/device/usbd.c b/src/device/usbd.c
+--- a/src/device/usbd.c
++++ b/src/device/usbd.c
+@@ -586,7 +586,13 @@ void tud_task_ext(uint32_t timeout_ms, bool in_isr) {
+   // Skip if stack is not initialized
+   if (!tud_inited()) return;
+ 
+-  // Loop until there is no more events in the queue
++#if defined(CFG_TUD_TASK_EVENTS_PER_RUN) && CFG_TUD_TASK_EVENTS_PER_RUN > 0
++  // STPG local opt-in: preserve FIFO events, yield between bounded quanta.
++  // This is an event-count limit, not a callback/IRQ execution-time bound.
++  uint32_t processed_events = 0;
++#endif
++
++  // Unconfigured callers retain the historical drain-until-empty behavior.
+   while (1) {
+     dcd_event_t event;
+     if (!osal_queue_receive(_usbd_q, &event, timeout_ms)) return;
+@@ -702,6 +708,10 @@ void tud_task_ext(uint32_t timeout_ms, bool in_isr) {
+         break;
+     }
+ 
++#if defined(CFG_TUD_TASK_EVENTS_PER_RUN) && CFG_TUD_TASK_EVENTS_PER_RUN > 0
++    if (++processed_events >= CFG_TUD_TASK_EVENTS_PER_RUN) return;
++#endif
++
+ #if CFG_TUSB_OS != OPT_OS_NONE && CFG_TUSB_OS != OPT_OS_PICO
+     // return if there is no more events, for application to run other background
+     if (osal_queue_empty(_usbd_q)) return;

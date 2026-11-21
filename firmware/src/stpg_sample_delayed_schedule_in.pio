@@ -1,0 +1,15 @@
+.program stpg_sample_delayed_schedule_in
+.wrap_target
+    pull block
+    ; One schedule word is consumed per output event. Bit 0 requests capture;
+    ; the remaining bits encode the delay count before that capture.
+    out y, 1
+    mov x, osr
+    wait 1 irq 4
+    jmp !y no_sample
+delay_loop:
+    jmp x-- delay_loop
+    in pins, 16
+no_sample:
+    irq clear 4
+.wrap

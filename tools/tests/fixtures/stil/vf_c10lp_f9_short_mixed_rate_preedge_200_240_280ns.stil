@@ -1,0 +1,160 @@
+Header { Title "vf_c10lp F9 short mixed-rate counter with pre-edge mode setup"; }
+Signals {
+  clk InOut;
+  rst_n InOut;
+  mode_0 InOut;
+  mode_1 InOut;
+  mode_2 InOut;
+  mode_3 InOut;
+  ctrl_0 InOut;
+  ctrl_1 InOut;
+  ctrl_2 InOut;
+  io_0 InOut;
+  io_1 InOut;
+  io_2 InOut;
+  io_3 InOut;
+  io_4 InOut;
+  dout_6 InOut;
+  dout_5 InOut;
+  dout_4 InOut;
+  dout_3 InOut;
+  dout_2 InOut;
+  dout_1 InOut;
+  dout_0 InOut;
+  io_7 InOut;
+  io_6 InOut;
+  io_5 InOut;
+}
+SignalGroups {
+  ALL = 'clk + rst_n + mode_0 + mode_1 + mode_2 + mode_3 + ctrl_0 + ctrl_1 + ctrl_2 + io_0 + io_1 + io_2 + io_3 + io_4 + dout_6 + dout_5 + dout_4 + dout_3 + dout_2 + dout_1 + dout_0 + io_7 + io_6 + io_5';
+}
+Timing {
+  WaveformTable WFT_200 {
+    Period '200ns';
+    Waveforms {
+      clk { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      rst_n { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_4 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      dout_6 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_5 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_4 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_3 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_2 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_1 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_0 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      io_7 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_6 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_5 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+  WaveformTable WFT_240 {
+    Period '240ns';
+    Waveforms {
+      clk { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      rst_n { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_4 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      dout_6 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      dout_5 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      dout_4 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      dout_3 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      dout_2 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      dout_1 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      dout_0 { H: 120ns Compare(1); L: 120ns Compare(0); T: 120ns Compare(X); }
+      io_7 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_6 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_5 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+  WaveformTable WFT_280 {
+    Period '280ns';
+    Waveforms {
+      clk { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      rst_n { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_4 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      dout_6 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      dout_5 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      dout_4 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      dout_3 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      dout_2 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      dout_1 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      dout_0 { H: 140ns Compare(1); L: 140ns Compare(0); T: 140ns Compare(X); }
+      io_7 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_6 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_5 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+Pattern F9_SHORT_MIXED_RATE_PREEDGE {
+  W WFT_200;
+  V { ALL = 00000000000000TTTTTTT000; }
+  V { ALL = 10000000000000TTTTTTT000; }
+  V { ALL = 01000000000000TTTTTTT000; }
+  V { ALL = 01010010000000TTTTTTT000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLLLL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLLLH000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLLHL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLLHH000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLHLL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLHLH000; }
+  W WFT_240;
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLHHL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLLHHH000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHLLL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHLLH000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHLHL000; }
+  W WFT_280;
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHLHH000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHHLL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHHLH000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHHHL000; }
+  V { ALL = 11010010000000TTTTTTT000; }
+  V { ALL = 01010010000000LLLHHHH000; }
+}

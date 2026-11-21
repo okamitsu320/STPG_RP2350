@@ -1,0 +1,30 @@
+Signals {
+  A InOut;
+  B InOut;
+  C InOut;
+  D InOut;
+}
+SignalGroups {
+  ALL = 'A + B + C + D';
+}
+Timing {
+  WaveformTable W1 {
+    Period '1000ns';
+    Waveforms {
+      A { 0: 0ns Drive(0); 1: 0ns Drive(1); U: 200ns Drive(1); D: 200ns Drive(0); u: 400ns Drive(1); d: 400ns Drive(0); p: 0ns Drive(0), 300ns Drive(1), 600ns Drive(0); }
+      B { 0: 0ns Drive(0); 1: 0ns Drive(1); U: 200ns Drive(1); D: 200ns Drive(0); u: 400ns Drive(1); d: 400ns Drive(0); Z: 0ns Drive(Z); }
+      C { H: 500ns Compare(1); L: 500ns Compare(0); h: 700ns Compare(1); l: 700ns Compare(0); X: 500ns Compare(X); T: 500ns Compare(X); }
+      D { H: 500ns Compare(1); L: 500ns Compare(0); h: 700ns Compare(1); l: 700ns Compare(0); X: 500ns Compare(X); T: 500ns Compare(X); }
+    }
+  }
+}
+Pattern P {
+  W W1;
+  V { ALL = 01HL; }
+  V { ALL = UDhl; }
+  V { ALL = udlh; }
+  V { ALL = \r2 1 Hl; }
+  V { ALL = p0XH; }
+  V { ALL = d1TX; }
+  V { ALL = 0 Z \r2 T; }
+}

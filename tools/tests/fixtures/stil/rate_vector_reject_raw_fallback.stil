@@ -1,0 +1,17 @@
+Header { Title "fallback"; }
+Signals {
+  D0 InOut;
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '40ns';
+    Waveforms {
+      D0 { H: 20ns Compare(1); P: 0ns Drive(0), 20ns Drive(1); }
+    }
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { D0 = H; }
+  V { D0 = P; }
+}

@@ -1,0 +1,17 @@
+Header { Title "pn-norm"; }
+Signals {
+  CLK InOut;
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '40ns';
+    Waveforms {
+      CLK { P: 0ns Drive(0), 20ns Drive(1); N: 0ns Drive(1), 20ns Drive(0); }
+    }
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { CLK = P; }
+  V { CLK = N; }
+}

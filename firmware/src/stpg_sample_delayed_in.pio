@@ -1,0 +1,10 @@
+.program stpg_sample_delayed_in
+.wrap_target
+    pull block
+    mov x, osr
+    wait 1 irq 4
+delay_loop:
+    jmp x-- delay_loop
+    in pins, 16
+    irq clear 4
+.wrap

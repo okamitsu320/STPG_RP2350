@@ -1,0 +1,48 @@
+Header { Title "c1-macro-m4-sampled-24pin-200ns"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+  D2 InOut;
+  D3 InOut;
+  D4 InOut;
+  D5 InOut;
+  D6 InOut;
+  D7 InOut;
+  D8 InOut;
+  D9 InOut;
+  D10 InOut;
+  D11 InOut;
+  D12 InOut;
+  D13 InOut;
+  D14 InOut;
+  D15 InOut;
+  D16 InOut;
+  D17 InOut;
+  D18 InOut;
+  D19 InOut;
+  D20 InOut;
+  D21 InOut;
+  D22 InOut;
+  D23 InOut;
+}
+SignalGroups {
+  ALL = 'D0 + D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13 + D14 + D15 + D16 + D17 + D18 + D19 + D20 + D21 + D22 + D23';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      ALL { X: 0ns Compare(X); }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    MAIN;
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = XXXXXXXXXXXXXXXXXXXXXXXX; }
+  V { ALL = XXXXXXXXXXXXXXXXXXXXXXXX; }
+}

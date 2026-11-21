@@ -1,0 +1,13 @@
+{
+  "kind": "stpg_runner_project",
+  "schema_version": 1,
+  "input": {"stil": "pattern.stil"},
+  "target": {
+    "runtime_profile": "psram-compare-sample-streaming-practical-5m2m",
+    "tick_hz": 200000000,
+    "max_rates": 64
+  },
+  "compile": {"mode": "rate-vector", "loop_policy": "preserve"},
+  "wait": {"preset": "none"},
+  "execution": {"storage": "psram", "completion": "hold"}
+}

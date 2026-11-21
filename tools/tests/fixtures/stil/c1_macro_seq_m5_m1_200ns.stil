@@ -1,0 +1,29 @@
+Header { Title "c1-macro-seq-m5-m1-200ns"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+}
+SignalGroups {
+  ALL = 'D0 + D1';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      D0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      D1 { X: 0ns Compare(X); H: 100ns Compare(H); L: 100ns Compare(L); }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    MAIN;
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = 0X; }
+  V { ALL = 1X; }
+  V { ALL = 0L; }
+  V { ALL = 1H; }
+}

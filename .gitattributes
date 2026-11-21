@@ -1,0 +1,3 @@
+# Reviewed source and SDK fingerprints bind exact file bytes on every OS.
+# In particular, a Windows core.autocrlf setting must not change those bytes.
+* -text

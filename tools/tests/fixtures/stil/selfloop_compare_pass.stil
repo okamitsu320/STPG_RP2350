@@ -1,0 +1,23 @@
+Header { Title "selfloop-compare-pass"; }
+Signals {
+  OBS InOut;
+  DRV InOut;
+}
+SignalGroups {
+  ALL = 'OBS + DRV';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '40ns';
+    Waveforms {
+      OBS { H: 20ns Compare(1); L: 20ns Compare(0); T: 20ns Compare(X); }
+      DRV { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = T1; }
+  V { ALL = H0; }
+  V { ALL = L1; }
+}

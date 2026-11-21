@@ -1,0 +1,26 @@
+Header { Title "single-rate"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+}
+SignalGroups {
+  ALL = 'D0 + D1';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '20ns';
+    Waveforms {
+      ALL { 0: 0ns Drive(0); 1: 0ns Drive(1); X: 10ns Compare(X); Z: 0ns DirZ; }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    MAIN;
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = 01; }
+  V { ALL = 10; }
+}

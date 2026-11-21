@@ -1,0 +1,89 @@
+Header { Title "campaign-2026-09-19"; }
+Signals {
+  clk InOut;
+  rst_n InOut;
+  mode_0 InOut;
+  mode_1 InOut;
+  mode_2 InOut;
+  mode_3 InOut;
+  ctrl_0 InOut;
+  ctrl_1 InOut;
+  ctrl_2 InOut;
+  io_0 InOut;
+  io_1 InOut;
+  io_2 InOut;
+  io_3 InOut;
+  io_4 InOut;
+  io_5 InOut;
+  io_6 InOut;
+  io_7 InOut;
+  dout_0 InOut;
+  dout_1 InOut;
+  dout_2 InOut;
+  dout_3 InOut;
+  dout_4 InOut;
+  dout_5 InOut;
+  dout_6 InOut;
+}
+SignalGroups {
+  ALL = 'clk + rst_n + mode_0 + mode_1 + mode_2 + mode_3 + ctrl_0 + ctrl_1 + ctrl_2 + io_0 + io_1 + io_2 + io_3 + io_4 + io_5 + io_6 + io_7 + dout_0 + dout_1 + dout_2 + dout_3 + dout_4 + dout_5 + dout_6';
+}
+Timing {
+  WaveformTable WFT_R0 {
+    Period '200ns';
+    Waveforms {
+      clk { 0: 0ns Drive(0); 1: 100ns Drive(1); }
+      rst_n { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_4 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_5 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_6 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      io_7 { 0: 0ns Drive(0); 1: 0ns Drive(1); R: 0ns Drive(1); F: 0ns Drive(0); P: 0ns Drive(1); N: 0ns Drive(0); X: 100ns Compare(X); Z: 0ns DirZ; }
+      dout_0 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_1 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_2 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_3 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_4 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_5 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_6 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+    }
+  }
+}
+Pattern MAIN {
+  W WFT_R0;
+  V { ALL = 00000000000000000TTTTTTT; }
+  W WFT_R0;
+  V { ALL = 10000000000000000TTTTTTT; }
+  W WFT_R0;
+  V { ALL = 01000010000000000TTTTTTT; }
+  W WFT_R0;
+  V { ALL = 11000010000000000TTTTTTT; }
+  W WFT_R0;
+  V { ALL = 01000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 11000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 01000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 11000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 01000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 11000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 11000010000000000LHLLLLL; }
+  W WFT_R0;
+  V { ALL = 11000010000000000LHLHLLL; }
+  W WFT_R0;
+  V { ALL = 01000010000000000LHLHLLL; }
+}

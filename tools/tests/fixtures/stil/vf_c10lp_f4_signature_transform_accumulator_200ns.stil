@@ -1,0 +1,136 @@
+Header { Title "vf_c10lp F4 signature transform accumulator"; }
+Signals {
+  clk InOut;
+  rst_n InOut;
+  mode_0 InOut;
+  mode_1 InOut;
+  mode_2 InOut;
+  mode_3 InOut;
+  ctrl_0 InOut;
+  ctrl_1 InOut;
+  ctrl_2 InOut;
+  io_0 InOut;
+  io_1 InOut;
+  io_2 InOut;
+  io_3 InOut;
+  io_4 InOut;
+  dout_6 InOut;
+  dout_5 InOut;
+  dout_4 InOut;
+  dout_3 InOut;
+  dout_2 InOut;
+  dout_1 InOut;
+  dout_0 InOut;
+  io_7 InOut;
+  io_6 InOut;
+  io_5 InOut;
+}
+SignalGroups {
+  ALL = 'clk + rst_n + mode_0 + mode_1 + mode_2 + mode_3 + ctrl_0 + ctrl_1 + ctrl_2 + io_0 + io_1 + io_2 + io_3 + io_4 + dout_6 + dout_5 + dout_4 + dout_3 + dout_2 + dout_1 + dout_0 + io_7 + io_6 + io_5';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      clk { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      rst_n { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_4 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      dout_6 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_5 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_4 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_3 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_2 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_1 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_0 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      io_7 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_6 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_5 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+Pattern F4_SIGNATURE_TRANSFORM_ACCUMULATOR {
+  W WFT1;
+  V { ALL = 00000000000000TTTTTTT000; }
+  V { ALL = 11000000000000TTTTTTT000; }
+  V { ALL = 01010010001001TTTTTTT000; }
+  V { ALL = 11010010001001TTTTTTT000; }
+  V { ALL = 01010010000101TTTTTTT001; }
+  V { ALL = 11010010000101TTTTTTT001; }
+  V { ALL = 01010010001101TTTTTTT010; }
+  V { ALL = 11010010001101TTTTTTT010; }
+  V { ALL = 01010010000011TTTTTTT011; }
+  V { ALL = 11010010000011TTTTTTT011; }
+  V { ALL = 01010000000000TTTTTTT000; }
+  V { ALL = 11010000000000TTTTTTT000; }
+  V { ALL = 01010000000000HLLHHLL000; }
+  V { ALL = 01010001000000TTTTTTT000; }
+  V { ALL = 11010001000000TTTTTTT000; }
+  V { ALL = 01010001000000HLHLHHL000; }
+  V { ALL = 01010100000000TTTTTTT000; }
+  V { ALL = 11010100000000TTTTTTT000; }
+  V { ALL = 01010100000000LHHLHLL000; }
+  V { ALL = 01010101000000TTTTTTT000; }
+  V { ALL = 11010101000000TTTTTTT000; }
+  V { ALL = 01010101000000LLHLLHL000; }
+  V { ALL = 01100010000000TTTTTTT000; }
+  V { ALL = 11100010000000TTTTTTT000; }
+  V { ALL = 01100010000000LHLLHLH000; }
+  V { ALL = 01100010011111TTTTTTT111; }
+  V { ALL = 11100010011111TTTTTTT111; }
+  V { ALL = 01100010011111HLHHLHL111; }
+  V { ALL = 01100010010101TTTTTTT010; }
+  V { ALL = 11100010010101TTTTTTT010; }
+  V { ALL = 01100010010101LLLHHHH010; }
+  V { ALL = 01100010001010TTTTTTT101; }
+  V { ALL = 11100010001010TTTTTTT101; }
+  V { ALL = 01100010001010HHHLLLL101; }
+  V { ALL = 01100010010000TTTTTTT000; }
+  V { ALL = 11100010010000TTTTTTT000; }
+  V { ALL = 01100010010000LHLLHHH000; }
+  V { ALL = 01100010000000TTTTTTT100; }
+  V { ALL = 11100010000000TTTTTTT100; }
+  V { ALL = 01100010000000LHLLHLL100; }
+  V { ALL = 01100010001111TTTTTTT011; }
+  V { ALL = 11100010001111TTTTTTT011; }
+  V { ALL = 01100010001111HLHHLLH011; }
+  V { ALL = 01100010010000TTTTTTT100; }
+  V { ALL = 11100010010000TTTTTTT100; }
+  V { ALL = 01100010010000LHLLHHL100; }
+  V { ALL = 00000000000000TTTTTTT000; }
+  V { ALL = 11000000000000TTTTTTT000; }
+  V { ALL = 01100110010000TTTTTTT000; }
+  V { ALL = 11100110010000TTTTTTT000; }
+  V { ALL = 01100110010000LLLLLLL000; }
+  V { ALL = 01100110001000TTTTTTT000; }
+  V { ALL = 11100110001000TTTTTTT000; }
+  V { ALL = 01100110001000LLLLLLH000; }
+  V { ALL = 01100110000100TTTTTTT000; }
+  V { ALL = 11100110000100TTTTTTT000; }
+  V { ALL = 01100110000100LLLLLHH000; }
+  V { ALL = 01100110000010TTTTTTT000; }
+  V { ALL = 11100110000010TTTTTTT000; }
+  V { ALL = 01100110000010LLLLHHH000; }
+  V { ALL = 01100110000001TTTTTTT000; }
+  V { ALL = 11100110000001TTTTTTT000; }
+  V { ALL = 01100110000001LLLHHHH000; }
+  V { ALL = 01100110000000TTTTTTT001; }
+  V { ALL = 11100110000000TTTTTTT001; }
+  V { ALL = 01100110000000LLHHHHH001; }
+  V { ALL = 01100110000000TTTTTTT010; }
+  V { ALL = 11100110000000TTTTTTT010; }
+  V { ALL = 01100110000000LHHHHHH010; }
+  V { ALL = 01100110000000TTTTTTT100; }
+  V { ALL = 11100110000000TTTTTTT100; }
+  V { ALL = 01100110000000HHHHHHH100; }
+}

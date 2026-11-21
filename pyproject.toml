@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stpg-rp2350"
+version = "0.1.0.dev7"
+description = "RP2350 pattern generator: STIL compiler, GUI, CLI and SDK"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "LICENSES/*"]
+dependencies = ["pyserial==3.5"]
+
+[project.urls]
+Repository = "https://github.com/okamitsu320/STPG_RP2350"
+Firmware = "https://github.com/okamitsu320/STPG_RP2350/releases"
+
+[project.optional-dependencies]
+dev = ["pytest>=7,<10", "build>=1,<2", "tomli>=2; python_version<'3.11'"]
+browser = ["selenium>=4,<5"]
+
+[project.scripts]
+stpg-view = "stpgview.cli:main"
+stpg-examples = "stpgview.physical.patterns:main"
+stpg-runner = "stpg_runner.cli:main"
+stpg-stil-compile = "stil.cli_compile:main"
+stpg-stil-preprocess = "stil.cli_preprocess:main"
+stpg-stil-analyze = "stil.cli_analyze:main"
+stpg-stil-package = "stil.cli_package:main"
+stpg-stil-convert = "stil.cli_convert:main"
+stpg-stil-segment-package = "stil.cli_segment_package:main"
+stpg-stil-wait-schedule = "stil.cli_wait_schedule:main"
+stpg-stil-wait-acceptance = "stil.cli_wait_acceptance:main"
+stpg-stil-local-wait-patch = "stil.cli_local_wait_patch:main"
+stpg-stil-rate-adapt = "stil.cli_rate_adapt:main"
+stpg-stil-inspect = "stil.cli_inspect:main"
+stpg-stil-stimulus = "stil.cli_stimulus:main"
+stpg-stil-compareprep = "stil.cli_compareprep:main"
+stpg-stil-underflow-analyze = "stil.cli_underflow_analyze:main"
+
+[tool.setuptools]
+package-dir = {"" = "tools"}
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["tools"]
+include = ["stpg", "stil", "stpg_runner", "stpgview", "stpgview.runner", "stpgview.physical"]
+namespaces = false
+
+[tool.setuptools.package-data]
+stpgview = ["static/*.html", "static/*.js", "static/*.css"]
+
+[tool.pytest.ini_options]
+testpaths = ["tools/tests"]
+pythonpath = [".", "tools"]
+markers = [
+  "slow: memory/time-intensive public synthetic regression; included by default",
+  "stpg_host_only: no physical device I/O",
+]

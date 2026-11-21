@@ -1,0 +1,87 @@
+Header { Title "vf_c10lp F1 mode-1 walking-1 stable-data pipelined compare"; }
+Signals {
+  clk InOut;
+  rst_n InOut;
+  mode_0 InOut;
+  mode_1 InOut;
+  mode_2 InOut;
+  mode_3 InOut;
+  ctrl_0 InOut;
+  ctrl_1 InOut;
+  ctrl_2 InOut;
+  io_0 InOut;
+  io_1 InOut;
+  io_2 InOut;
+  io_3 InOut;
+  io_4 InOut;
+  dout_6 InOut;
+  dout_5 InOut;
+  dout_4 InOut;
+  dout_3 InOut;
+  dout_2 InOut;
+  dout_1 InOut;
+  dout_0 InOut;
+  io_7 InOut;
+  io_6 InOut;
+  io_5 InOut;
+}
+SignalGroups {
+  ALL = 'clk + rst_n + mode_0 + mode_1 + mode_2 + mode_3 + ctrl_0 + ctrl_1 + ctrl_2 + io_0 + io_1 + io_2 + io_3 + io_4 + dout_6 + dout_5 + dout_4 + dout_3 + dout_2 + dout_1 + dout_0 + io_7 + io_6 + io_5';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      clk { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      rst_n { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      mode_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      ctrl_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_1 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_2 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_3 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_4 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      dout_6 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_5 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_4 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_3 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_2 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_1 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      dout_0 { H: 100ns Compare(1); L: 100ns Compare(0); T: 100ns Compare(X); }
+      io_5 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_6 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+      io_7 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+Pattern F1_WALKING1_STABLE_DATA_PIPELINED {
+  W WFT1;
+  V { ALL = 00100010000000TTTTTTT000; }
+  V { ALL = 10100010000000TTTTTTT000; }
+  V { ALL = 01100010000000LLLLLLL000; }
+  V { ALL = 11100010000000TTTTTTT000; }
+  V { ALL = 01100010010000LLLLLLL000; }
+  V { ALL = 11100010010000TTTTTTT000; }
+  V { ALL = 01100010001000TTTTTTT000; }
+  V { ALL = 11100010001000TTTTTTT000; }
+  V { ALL = 01100010000100LLLLLLH000; }
+  V { ALL = 11100010000100TTTTTTT000; }
+  V { ALL = 01100010000010LLLLHLL000; }
+  V { ALL = 11100010000010TTTTTTT000; }
+  V { ALL = 01100010000001LLLHLLL000; }
+  V { ALL = 11100010000001TTTTTTT000; }
+  V { ALL = 01100010000000LLHLLLL001; }
+  V { ALL = 11100010000000TTTTTTT001; }
+  V { ALL = 01100010000000LHLLLLL010; }
+  V { ALL = 11100010000000TTTTTTT010; }
+  V { ALL = 01100010000000HLLLLLL100; }
+  V { ALL = 11100010000000TTTTTTT100; }
+  V { ALL = 01100010000000LLLLLLL000; }
+  V { ALL = 11100010000000TTTTTTT000; }
+  V { ALL = 01100010000000LLLLLLL000; }
+}

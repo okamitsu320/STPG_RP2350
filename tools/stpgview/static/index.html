@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STPG View</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 17h4V7h4v10h4V7h4v10h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <span>STPG View</span>
+  </div>
+  <div class="mode-switch" role="tablist" aria-label="Mode">
+    <button id="modeView" class="mode active" type="button" role="tab" aria-selected="true">Viewer</button>
+    <button id="modeRun" class="mode" type="button" role="tab" aria-selected="false">Runner</button>
+  </div>
+  <nav id="traceTabs" class="trace-tabs" aria-label="Loaded patterns"></nav>
+  <div id="activity" class="activity" role="status" aria-live="polite" hidden><span class="spinner"></span><span id="activityText"></span></div>
+  <div class="top-actions">
+    <form id="gotoForm" class="goto" autocomplete="off">
+      <input id="gotoInput" type="text" placeholder="Go to: 120 · L57 · 3.2us" title="Vector index, STIL line (L57) or time (3.2us)" spellcheck="false">
+    </form>
+    <button id="openBtn" class="btn primary" type="button">Open…</button>
+    <button id="runnerBtn" class="btn" type="button" disabled title="Make a runner project from the open STIL (Runner page, New project) and build it there">Build in Runner…</button>
+    <button id="colorBtn" class="btn" type="button" disabled title="Colours for rates (WaveformTables) and signals">Colours…</button>
+    <button id="vcdBtn" class="btn" type="button" disabled>Export VCD</button>
+    <button id="extBtn" class="btn" type="button" hidden title="Export to VCD and open it in an installed waveform viewer">Open in …</button>
+    <button id="themeBtn" class="btn icon" type="button" title="Toggle light/dark">◐</button>
+    <button id="helpBtn" class="btn icon" type="button" title="Keys and legend">?</button>
+  </div>
+</header>
+
+<main class="workspace">
+  <section class="wave-pane">
+    <div id="waveHost" class="wave-host">
+      <canvas id="wave"></canvas>
+      <div id="tooltip" class="tooltip" hidden></div>
+      <div id="emptyState" class="empty-state">
+        <h1>Open a pattern</h1>
+        <p>STIL source, a compiled <code>pattern.bin</code> (its <code>pattern.map.json</code> is picked up automatically), or a package directory.</p>
+        <p class="muted">Drop files here, or use <strong>Open…</strong></p>
+      </div>
+    </div>
+    <div id="splitter" class="splitter" role="separator" aria-orientation="horizontal" title="Drag to resize"></div>
+    <div class="table-pane">
+      <div class="table-head">
+        <div class="col-meta" id="colMeta">
+          <span class="c-i">#</span><span class="c-t">time</span><span class="c-p">period</span><span class="c-r">rate</span><span class="c-l">line</span>
+        </div>
+        <div id="charHead" class="char-head"></div>
+      </div>
+      <div id="tableScroll" class="table-scroll">
+        <div id="tableSpacer" class="table-spacer"></div>
+        <div id="tableRows" class="table-rows"></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="inspector" id="inspector">
+    <div class="insp-section" id="failsInfo" hidden></div>
+    <div class="insp-section" id="vectorInfo">
+      <h2>Vector</h2>
+      <p class="muted">Click a vector in the waveform or table.</p>
+    </div>
+    <div class="insp-section edit-panel" id="editPanel" hidden></div>
+    <details class="insp-section" id="eventsBox" open hidden><summary>Events</summary><div id="eventsList"></div></details>
+    <div class="insp-section" id="traceInfo"></div>
+  </aside>
+</main>
+
+
+<main class="runner-page" id="runnerPage" hidden>
+  <div id="runnerBanner" class="runner-banner" hidden></div>
+  <div class="runner-grid">
+    <div class="runner-col">
+      <section class="card" id="cardProject">
+        <header class="card-head"><h2>1 · Project or bundle</h2>
+          <div class="card-actions">
+            <button class="btn small" type="button" id="rpOpenProject">Open project…</button>
+            <button class="btn small" type="button" id="rpOpenBundle">Open bundle…</button>
+            <button class="btn small" type="button" id="rpNewProject">New project…</button>
+          </div>
+        </header>
+        <div class="card-body" id="rpProjectBody"><p class="muted">Open a portable project (<code>project.stpg-project.json</code>), a bundle built by <code>stpg-runner build</code>, or create a new project from a STIL file.</p></div>
+      </section>
+      <section class="card" id="cardBuild">
+        <header class="card-head"><h2>2 · Build · verify · plan <small class="muted">offline, no device contact</small></h2>
+          <div class="card-actions">
+            <button class="btn small primary" type="button" id="rpBuild" disabled>Build</button>
+            <button class="btn small" type="button" id="rpVerify" disabled>Verify</button>
+            <button class="btn small" type="button" id="rpPlan" disabled>Plan</button>
+          </div>
+        </header>
+        <div class="card-body" id="rpBuildBody"><p class="muted">Builds use the shared runner SDK (<code>stpg_runner.build_project</code>); results are the same bundles the CUI produces.</p></div>
+      </section>
+      <section class="card" id="cardRun">
+        <header class="card-head"><h2>3 · Run</h2>
+          <div class="card-actions">
+            <button class="btn small primary" type="button" id="rpRun" disabled>Run…</button>
+            <button class="btn small danger" type="button" id="rpCancel" hidden>Cancel</button>
+          </div>
+        </header>
+        <div class="card-body" id="rpRunBody"></div>
+      </section>
+    </div>
+    <div class="runner-col">
+      <section class="card" id="cardBindings">
+        <header class="card-head"><h2>Local bindings <small class="muted">kept outside the project</small></h2>
+          <div class="card-actions">
+            <button class="btn small" type="button" id="rpManageDevices">Devices…</button>
+            <button class="btn small" type="button" id="rpManageAnalyzers">Analyzers…</button>
+            <button class="btn small" type="button" id="rpManageControllers">Controllers…</button>
+          </div>
+        </header>
+        <div class="card-body" id="rpBindingsBody"></div>
+      </section>
+      <section class="card" id="cardControl">
+        <header class="card-head"><h2>GPIO controller <small class="muted">optional · manual reset / set</small></h2>
+          <div class="card-actions">
+            <button class="btn small" type="button" id="rpResetStpg" disabled>Reset STPG…</button>
+            <button class="btn small" type="button" id="rpResetLa" disabled>Reset LA…</button>
+            <button class="btn small" type="button" id="rpSetGpio" disabled>Set GPIO…</button>
+            <button class="btn small danger" type="button" id="rpControlCancel" hidden>Cancel</button>
+          </div>
+        </header>
+        <div class="card-body" id="rpControlBody"></div>
+      </section>
+      <section class="card" id="cardExternal">
+        <header class="card-head"><h2>External accessory <small class="muted">optional · separate program and process</small></h2></header>
+        <div class="card-body" id="rpExternalBody"></div>
+      </section>
+      <section class="card" id="cardResults">
+        <header class="card-head"><h2>Results</h2>
+          <div class="card-actions"><button class="btn small" type="button" id="rpRefreshResults">Refresh</button></div>
+        </header>
+        <div class="card-body" id="rpResultsBody"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="statusbar">
+  <span id="statusCursor">—</span>
+  <span id="statusView"></span>
+  <span id="statusMsg" class="status-msg"></span>
+</footer>
+
+<dialog id="openDialog" class="dialog">
+  <form method="dialog" class="dialog-body" id="openForm">
+    <h2>Open pattern</h2>
+    <div class="browse-bar">
+      <button type="button" class="btn small" id="browseUp" title="Parent folder">↑</button>
+      <button type="button" class="btn small" id="browseHome" title="Home folder">⌂</button>
+      <input id="browsePath" type="text" spellcheck="false">
+      <button type="button" class="btn small" id="browseGo">Go</button>
+    </div>
+    <div class="browse-roots" id="browseRoots"></div>
+    <ul id="browseList" class="browse-list"></ul>
+    <label class="field">
+      <span>Files to open <small class="muted">(.stil, .bin, map / pin-map / manifest .json, or a package folder — one per line)</small></span>
+      <textarea id="openPaths" rows="3" spellcheck="false"></textarea>
+    </label>
+    <label class="field">
+      <span>Pin map <small class="muted">(optional)</small></span>
+      <input id="openPinMap" type="text" spellcheck="false" placeholder="path/to/pinmap.json">
+    </label>
+    <label class="check"><input type="checkbox" id="openAdd"> Keep the patterns already open (compare side by side)</label>
+    <p id="openError" class="error" hidden></p>
+    <div class="dialog-actions">
+      <button value="cancel" class="btn" formnovalidate>Cancel</button>
+      <button id="openSubmit" value="default" class="btn primary">Open</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="colorDialog" class="dialog">
+  <form method="dialog" class="dialog-body" id="colorForm">
+    <h2>Colours</h2>
+    <p class="muted small-print">Rates tint their vectors in the waveform, mark the ruler and the table's rate column; signals colour their lane and table column. Kept in this browser by name, so other patterns with the same rate or signal names use them too.</p>
+    <div class="color-cols">
+      <section>
+        <div class="color-head"><h3 class="sub">Rates (WaveformTables)</h3>
+          <button type="button" class="btn small" id="colorAutoRates">Colour all</button>
+          <button type="button" class="btn small" id="colorClearRates">Clear</button></div>
+        <ul id="colorRates" class="color-list"></ul>
+      </section>
+      <section>
+        <div class="color-head"><h3 class="sub">Signals</h3>
+          <button type="button" class="btn small" id="colorAutoSignals">Colour all</button>
+          <button type="button" class="btn small" id="colorClearSignals">Clear</button></div>
+        <ul id="colorSignals" class="color-list"></ul>
+      </section>
+    </div>
+    <div class="dialog-actions"><button class="btn primary">Close</button></div>
+  </form>
+</dialog>
+
+<dialog id="helpDialog" class="dialog">
+  <form method="dialog" class="dialog-body">
+    <h2>Legend</h2>
+    <ul class="legend">
+      <li><i class="sw drive"></i> Drive 0 / 1 — tester drives the pin (DUT input)</li>
+      <li><i class="sw cmp-h"></i> Compare H — expects high (DUT output)</li>
+      <li><i class="sw cmp-l"></i> Compare L — expects low</li>
+      <li><i class="sw masked"></i> X — sampled, not compared</li>
+      <li><i class="sw release"></i> Z — tester not driving</li>
+      <li><i class="sw wait"></i> Inserted wait (period longer than the rate's base period)</li>
+      <li><i class="sw rate"></i> Rate colour (Colours…): tints the vectors and marks the ruler under the vector numbers</li>
+    </ul>
+    <h2>Keys and mouse</h2>
+    <table class="keys">
+      <tr><td>Wheel</td><td>Scroll signals</td></tr>
+      <tr><td>Ctrl + wheel / + −</td><td>Zoom at the pointer</td></tr>
+      <tr><td>Shift + wheel / drag</td><td>Pan in time</td></tr>
+      <tr><td>Click</td><td>Select vector</td></tr>
+      <tr><td>Shift + click</td><td>Select a range of vectors (for editing)</td></tr>
+      <tr><td>Click a signal name</td><td>Highlight the signal (default for the edit forms)</td></tr>
+      <tr><td>Right-click a signal name</td><td>Its colour (Colours…)</td></tr>
+      <tr><td>Drag a table column edge</td><td>Resize the column (double-click: fit the contents)</td></tr>
+      <tr><td>← →</td><td>Previous / next vector</td></tr>
+      <tr><td>F</td><td>Fit whole pattern</td></tr>
+      <tr><td>Z</td><td>Zoom to the selected vector</td></tr>
+      <tr><td>/</td><td>Go to vector, line or time</td></tr>
+    </table>
+    <div class="dialog-actions"><button class="btn primary">Close</button></div>
+  </form>
+</dialog>
+
+
+<dialog id="pickDialog" class="dialog">
+  <form method="dialog" class="dialog-body" id="pickForm">
+    <h2 id="pickTitle">Choose</h2>
+    <div class="browse-bar">
+      <button type="button" class="btn small" id="pickUp" title="Parent folder">↑</button>
+      <button type="button" class="btn small" id="pickHome" title="Home folder">⌂</button>
+      <input id="pickDir" type="text" spellcheck="false">
+      <button type="button" class="btn small" id="pickGo">Go</button>
+    </div>
+    <div class="browse-roots" id="pickRoots"></div>
+    <ul id="pickList" class="browse-list"></ul>
+    <label class="field" id="pickNewRow" hidden><span>New folder name</span><input id="pickNewName" type="text" spellcheck="false" placeholder="e.g. my-project"><span class="hint">Created inside the folder shown above when you press Create in the form; nothing is made on disk before that.</span></label>
+    <label class="field"><span id="pickLabel">Path</span><input id="pickPath" type="text" spellcheck="false"></label>
+    <p id="pickError" class="error" hidden></p>
+    <div class="dialog-actions">
+      <button value="cancel" class="btn" formnovalidate>Cancel</button>
+      <button id="pickOk" value="default" class="btn primary">Choose</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="formDialog" class="dialog wide">
+  <form method="dialog" class="dialog-body" id="formDialogForm">
+    <h2 id="formDialogTitle"></h2>
+    <div id="formDialogBody" class="form-grid"></div>
+    <p id="formDialogError" class="error" hidden></p>
+    <div class="dialog-actions" id="formDialogActions">
+      <button value="cancel" class="btn" formnovalidate>Close</button>
+      <button id="formDialogOk" value="default" class="btn primary">OK</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="confirmRunDialog" class="dialog wide">
+  <form method="dialog" class="dialog-body" id="confirmRunForm">
+    <h2>Confirm run</h2>
+    <div id="confirmRunBody" class="confirm-body"></div>
+    <div id="confirmRunAcks" class="acks"></div>
+    <p id="confirmRunError" class="error" hidden></p>
+    <div class="dialog-actions">
+      <button value="cancel" class="btn" formnovalidate>Cancel</button>
+      <button id="confirmRunStart" value="default" class="btn primary danger-primary" disabled>Start run</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="confirmControlDialog" class="dialog wide">
+  <form method="dialog" class="dialog-body" id="confirmControlForm">
+    <h2 id="confirmControlTitle">Confirm GPIO operation</h2>
+    <div id="confirmControlBody" class="confirm-body"></div>
+    <div id="confirmControlAcks" class="acks"></div>
+    <p id="confirmControlError" class="error" hidden></p>
+    <div class="dialog-actions">
+      <button value="cancel" class="btn" formnovalidate>Cancel</button>
+      <button id="confirmControlStart" value="default" class="btn primary danger-primary" disabled>Send</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/static/app.js"></script>
+<script src="/static/runner.js"></script>
+</body>
+</html>

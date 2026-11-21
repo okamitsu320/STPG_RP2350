@@ -1,0 +1,23 @@
+Header { Title "Public synthetic two-pin example"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+}
+SignalGroups {
+  ALL = 'D0 + D1';
+}
+Timing {
+  WaveformTable NORMAL {
+    Period '400ns';
+    Waveforms {
+      ALL { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+Pattern MAIN {
+  W NORMAL;
+  V { ALL = 00; }
+  V { ALL = 01; }
+  V { ALL = 10; }
+  V { ALL = 11; }
+}

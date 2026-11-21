@@ -1,0 +1,71 @@
+Header { Title "c1-macro-m2-sampled-24pin-200ns"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+  D2 InOut;
+  D3 InOut;
+  D4 InOut;
+  D5 InOut;
+  D6 InOut;
+  D7 InOut;
+  D8 InOut;
+  D9 InOut;
+  D10 InOut;
+  D11 InOut;
+  D12 InOut;
+  D13 InOut;
+  D14 InOut;
+  D15 InOut;
+  D16 InOut;
+  D17 InOut;
+  D18 InOut;
+  D19 InOut;
+  D20 InOut;
+  D21 InOut;
+  D22 InOut;
+  D23 InOut;
+}
+SignalGroups {
+  CORE = 'D0 + D1';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      D0 { X: 0ns Compare(X); }
+      D1 { 0: 100ns Drive(0); 1: 100ns Drive(1); }
+      D2 { 0: 0ns Drive(0); }
+      D3 { 0: 0ns Drive(0); }
+      D4 { 0: 0ns Drive(0); }
+      D5 { 0: 0ns Drive(0); }
+      D6 { 0: 0ns Drive(0); }
+      D7 { 0: 0ns Drive(0); }
+      D8 { 0: 0ns Drive(0); }
+      D9 { 0: 0ns Drive(0); }
+      D10 { 0: 0ns Drive(0); }
+      D11 { 0: 0ns Drive(0); }
+      D12 { 0: 0ns Drive(0); }
+      D13 { 0: 0ns Drive(0); }
+      D14 { 0: 0ns Drive(0); }
+      D15 { 0: 0ns Drive(0); }
+      D16 { 0: 0ns Drive(0); }
+      D17 { 0: 0ns Drive(0); }
+      D18 { 0: 0ns Drive(0); }
+      D19 { 0: 0ns Drive(0); }
+      D20 { 0: 0ns Drive(0); }
+      D21 { 0: 0ns Drive(0); }
+      D22 { 0: 0ns Drive(0); }
+      D23 { 0: 0ns Drive(0); }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    MAIN;
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { CORE = X0; }
+  V { CORE = X1; }
+}

@@ -1,0 +1,24 @@
+include README.md LICENSE THIRD_PARTY_NOTICES.md SECURITY.md CONTRIBUTING.md
+include .gitignore .gitattributes
+recursive-include LICENSES *
+recursive-include manual *.md *.png
+recursive-include release *.json
+recursive-include examples *.stil *.json *.md
+recursive-include controller *.ino *.md
+recursive-include firmware *.c *.h *.S *.pio *.cmake *.ld *.txt *.patch *.json
+recursive-include release_tools *.py
+recursive-include publication_tools *.py
+recursive-include tools/tests *.py *.stil *.json *.ino *.c *.cpp *.h
+include tools/scripts/__init__.py
+include tools/scripts/repack_usbd_after_tud_task_ext.py
+include tools/scripts/repack_usb_cluster.py
+prune doc
+prune docs
+prune recovery-safe
+prune review
+prune release_coordination
+prune tools/reviews
+prune tools/stpg_capture
+prune tools/stpg_la
+prune firmware/build
+global-exclude *.py[cod] __pycache__ .DS_Store *.elf *.uf2 *.bin *.map

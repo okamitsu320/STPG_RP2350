@@ -1,0 +1,26 @@
+Header { Title "patternburst"; }
+Signals {
+  D0 InOut;
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '20ns';
+    Waveforms {
+      D0 { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    PAT0;
+    PAT1;
+  }
+}
+Pattern PAT0 {
+  W WFT1;
+  V { D0 = 0; }
+}
+Pattern PAT1 {
+  W WFT1;
+  V { D0 = 1; }
+}

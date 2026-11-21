@@ -1,0 +1,27 @@
+Header { Title "human-run-smoke-200ns"; }
+Signals {
+  D0 InOut;
+}
+SignalGroups {
+  ALL = 'D0';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      ALL { 0: 0ns Drive(0); 1: 0ns Drive(1); }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    MAIN;
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = 0; }
+  V { ALL = 1; }
+  V { ALL = 0; }
+  V { ALL = 1; }
+}

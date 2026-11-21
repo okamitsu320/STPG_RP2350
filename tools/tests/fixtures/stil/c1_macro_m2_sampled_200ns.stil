@@ -1,0 +1,27 @@
+Header { Title "c1-macro-m2-sampled-200ns"; }
+Signals {
+  D0 InOut;
+  D1 InOut;
+}
+SignalGroups {
+  ALL = 'D0 + D1';
+}
+Timing {
+  WaveformTable WFT1 {
+    Period '200ns';
+    Waveforms {
+      D0 { X: 0ns Compare(X); }
+      D1 { 0: 100ns Drive(0); 1: 100ns Drive(1); }
+    }
+  }
+}
+PatternBurst PB1 {
+  PatList {
+    MAIN;
+  }
+}
+Pattern MAIN {
+  W WFT1;
+  V { ALL = X0; }
+  V { ALL = X1; }
+}

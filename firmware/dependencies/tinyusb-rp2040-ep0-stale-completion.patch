@@ -1,0 +1,21 @@
+diff --git a/src/portable/raspberrypi/rp2040/rp2040_usb.c b/src/portable/raspberrypi/rp2040/rp2040_usb.c
+index 43f48da39..0fd4d2fcb 100644
+--- a/src/portable/raspberrypi/rp2040/rp2040_usb.c
++++ b/src/portable/raspberrypi/rp2040/rp2040_usb.c
+@@ -304,6 +304,16 @@ bool __tusb_irq_path_func(hw_endpoint_xfer_continue)(struct hw_endpoint* ep) {
+ 
+   // Part way through a transfer
+   if (!ep->active) {
++    // A new control request can retire an EP0 transfer while the controller's
++    // completion bit for that transfer is still pending.  The caller clears
++    // that stale BUFF_STATUS bit before reaching here, so there is no transfer
++    // to continue or completion event to report.  Treat this EP0-only race as
++    // consumed instead of panicking in USBCTRL_IRQ.  Keep the existing panic
++    // for non-control endpoints, where an inactive completion is unexpected.
++    if (tu_edpt_number(ep->ep_addr) == 0u) {
++      hw_endpoint_lock_update(ep, -1);
++      return false;
++    }
+     panic("Can't continue xfer on inactive ep %02X", ep->ep_addr);
+   }
+ 
