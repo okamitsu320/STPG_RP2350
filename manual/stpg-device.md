@@ -34,16 +34,19 @@ the run before anything is uploaded. Nothing is guessed, skipped or copied over 
 | Firmware version | A 32-bit identity of the STPG firmware build: major and minor version in the low two bytes, a build-layout code in the third byte and the rate-table size in the top byte | Not the USB device version, the Python package version or the bootloader version |
 | Capability | A set of bits, one for each feature the firmware was built with (for example PSRAM streaming, 24-pin runs, sample capture). The form names the bits of the value you type | Not a list of features you choose: it must match the firmware exactly |
 
-Where the values come from:
+Enter the values documented for **the exact image you installed**. Look for them beside its checksum in
+[GitHub Releases](https://github.com/okamitsu320/STPG_RP2350/releases). For the long-wait firmware preview
+on the tested STPG board:
 
-- **From the release of the firmware you installed.** Each firmware release is meant to list both values with the
-  firmware file.
-- **Not yet settled for this candidate.** No firmware Release with recorded values has been published yet, so this
-  page cannot give values to type. Until then, use the values given with the firmware file you were provided, by
-  the person who built it.
-- **If a run reports a different identity,** its result shows both: what the binding expects and what the board
-  reported. Check first that the board and its firmware are the ones you meant. Change the binding (**Devices… →
-  Edit**) only if the board's firmware is the one you want to use; the program never changes a binding by itself.
+| Firmware file | Firmware version | Capability |
+| --- | --- | --- |
+| `stpg-rp2350-long-wait-rc1.uf2` | `0x40010204` | `0x009F7BFF` |
+
+These values are not defaults for every board or build. Flash-related capability bits depend on the board's
+memory profile and initialization. If a run reports a different identity, the result shows both what the
+binding expects and what the board reported. Verify the board, installed image and its documented values
+before editing the binding (**Devices… → Edit**). Do not copy a mismatched INFO reply into the binding just to make
+the check pass. The program never changes a binding by itself.
 
 ## Check it
 

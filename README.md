@@ -7,6 +7,8 @@ Loop preservation, automatic segmentation and explicit timing/wait policies
 support larger patterns. Run completion, comparison results and optional
 accessory results are separate: none alone certifies a device under test.
 
+![Viewer showing the four-vector public demo input, not a measured waveform](manual/images/viewer-simulated.png)
+
 ## First run: a simulated tutorial
 
 This walks you through the GUI once, from a sample pattern to a run result, against a **simulated** STPG. No board,
@@ -61,6 +63,8 @@ Stop it later with Ctrl+C in that terminal.
    **SIMULATED — no hardware** badge, and the result folder inside the project. With the suggested project name,
    look under `samples/gui_tiny-project/results/`. The `runs-check` folder is for runs outside a project.
 
+![Simulated run result: completed, with comparison not applicable](manual/images/run-simulated.png)
+
 That is the whole loop. The [getting-started guide](manual/getting-started.md) explains each screen in more detail.
 
 ### Next: a real STPG
@@ -95,11 +99,12 @@ PCB reference designs are not included.
 - [Host-only testing](manual/development/testing.md): source, wheel, source archive and C tests.
 - [Firmware releases and build provenance](manual/development/firmware.md).
 - [CLI and SDK](manual/development/interfaces.md).
-- [Licensing and third-party notices](THIRD_PARTY_NOTICES.md).
+- [MIT license](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
 
 Check [GitHub Releases](https://github.com/okamitsu320/STPG_RP2350/releases)
 for available firmware, SHA-256 checksums and the matching build record.
-Firmware binaries are not checked into this source tree. Builds made in
-another environment are **not guaranteed to produce the same binary or the
-same behaviour as the Release**. Read the hardware limits and the release
-notes before programming a board.
+For the host software and its tutorials, use [the core main branch](https://github.com/okamitsu320/STPG_RP2350/tree/main)
+and the matching LA main branch if needed. The firmware release's automatic source archives are snapshots of the
+firmware build source, so their host documentation can be older. Firmware binaries are not checked into this source
+tree. Builds made in another environment are **not guaranteed to produce the same binary or the same behaviour as
+the Release**. Read the hardware limits and the release notes before programming a board.

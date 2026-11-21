@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a reproducible STPG core or Runner problem using public or synthetic data.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues are public after publication. Do not attach private STIL, project or result folders, unreviewed logs or screenshots, USB serial numbers, personal paths, or tokens.
+        For a suspected vulnerability, use [the private reporting instructions](https://github.com/okamitsu320/STPG_RP2350/security/policy) instead.
+  - type: input
+    id: environment
+    attributes:
+      label: Software and environment
+      description: Core version or commit, operating system, Python version, and simulator or physical board. If it was a physical run, give the documented firmware release name, not the USB serial number.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps, expected outcome, and actual outcome
+      description: Use a bundled sample or a small public or synthetic example. If it cannot be shared, describe the steps without attaching the original data.
+    validations:
+      required: true
+  - type: checkboxes
+    id: information
+    attributes:
+      label: Check before posting
+      options:
+        - label: Any examples are public or synthetic, and I have removed confidential data and device identifiers.
+          required: true

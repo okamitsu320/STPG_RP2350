@@ -84,7 +84,7 @@ the lower part is the vector table. The [Viewer](viewer.md) page explains the ma
 ![The public gui_tiny pattern in the Viewer](images/viewer-simulated.png)
 
 Actual Viewer panel from this walkthrough, using the public sample. This is a drawing of the input, not a measured
-waveform. Local path fields and the page header are omitted from the panel screenshots.
+waveform.
 
 ## 5. Build it
 
@@ -94,6 +94,11 @@ waveform. Local path fields and the page header are omitted from the panel scree
 3. Press **Create**, then **Build**.
 
 The build reports each stage. **Verify** checks the result and **Plan** shows what would run; neither touches a device.
+
+![Build stages and bundle summary for the public simulated walkthrough](images/build-simulated.png)
+
+The build ends at `HOST_ONLY_VERIFIED`: a host check of the bundle, before any run. The folder, hashes and times
+are examples from the walkthrough.
 
 ## 6. Run it
 
@@ -109,7 +114,8 @@ The word SIMULATED must be present: this confirms the walkthrough did not exerci
 
 Actual simulated-run result panel. COMPLETED is not a hardware or DUT pass; this sample has no comparisons.
 
-These images are produced by `test_getting_started_browser.py` from the installed program with an empty PATH. See
+These panels are captured from the installed program during `test_getting_started_browser.py`, with hardware access
+disabled and an empty PATH. See
 [GUI testing](testing-gui.md) to reproduce the browser walkthrough.
 
 ## Next

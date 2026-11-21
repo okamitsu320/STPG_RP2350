@@ -89,6 +89,10 @@ a run or device result. **Plan** shows the segments and what each will do.
    checked. The first check of a bundle takes a while; later ones are quick.
 3. The confirmation shows exactly what will run. Tick every statement and press **Start run**.
 
+![Run confirmation in the simulated tutorial, with safety acknowledgements and Start run disabled](images/run-confirm-simulated.png)
+
+This example uses the demo device. Its identity is the simulator's, not a value to enter into a real binding.
+
 What you confirmed is what runs: a binding or accessory config changed afterwards is refused at Start.
 
 If a finished rejected/cancelled record ends after an accepted upload (for example at a GPIO controller step), the
