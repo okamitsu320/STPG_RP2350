@@ -4,6 +4,10 @@ Capturing the real waveform around a chosen vector is done by a **separate tool*
 [repository and download](https://github.com/okamitsu320/STPG_RP2350_LA), program `stpg-la`,
 browser page and licence (GPL v3). `stpg-view` contains none of its code, and every other function works without it.
 
+For a physical capture, the analyzer runs the unbundled V6 firmware from
+[LogicAnalyzer by gusmanb](https://github.com/gusmanb/logicanalyzer/releases/tag/v6.0.0.0). The STPG companion is a
+separate project; report problems with the companion to the companion repository, not to the firmware project.
+
 So there are two pages, and each has its job:
 
 | Task | Where |

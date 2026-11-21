@@ -81,10 +81,10 @@ disabling the simulator. Its results are marked SIMULATED and say nothing about 
 On the **Viewer** page press **Open…**, choose `samples/gui_tiny.stil` and open it. The upper part is the waveform and
 the lower part is the vector table. The [Viewer](viewer.md) page explains the marks.
 
-![The public gui_tiny pattern in the Viewer](images/viewer-simulated.png)
+![The waveform panel of the Viewer with the public gui_tiny demo input](images/viewer-simulated.png)
 
-Actual Viewer panel from this walkthrough, using the public sample. This is a drawing of the input, not a measured
-waveform.
+The waveform panel shows the input from this walkthrough, not a measured waveform. In the Viewer the vector table
+is below this panel.
 
 ## 5. Build it
 

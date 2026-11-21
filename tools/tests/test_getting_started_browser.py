@@ -113,8 +113,8 @@ def test_the_getting_started_page_works_as_written(browser, tmp_path):  # noqa: 
         driver.find_element(By.ID, "openPaths").send_keys(str(tmp_path / "samples" / "gui_tiny.stil"))
         driver.find_element(By.ID, "openSubmit").click()
         until(lambda: driver.find_element(By.ID, "runnerBtn").is_enabled(), "the open pattern")
-        # The waveform/table panel contains only the public signal names/data.
-        manual_shot(driver, "viewer-simulated.png", ".workspace .wave-pane", size_for_panel=(1280, 720))
+        # Capture the waveform panel itself, at a viewport sized for two signals.
+        manual_shot(driver, "viewer-simulated.png", "#waveHost", size_for_panel=(1280, 540))
 
         # 5. Build it
         assert driver.find_element(By.ID, "runnerBtn").text == "Build in Runner…"
@@ -137,6 +137,8 @@ def test_the_getting_started_page_works_as_written(browser, tmp_path):  # noqa: 
         assert driver.find_element(By.ID, "rpRun").text == "Run…"
         driver.find_element(By.ID, "rpRun").click()
         until(lambda: is_open("confirmRunDialog"), "the confirmation")
+        assert "do not verify wiring or waveform timing" in text("confirmRunDialog")
+        assert "contract M2" not in text("confirmRunDialog")
         manual_shot(driver, "run-confirm-simulated.png", "#confirmRunDialog")
         boxes = "#confirmRunAcks input[type=checkbox]"
         for index in range(len(driver.find_elements(By.CSS_SELECTOR, boxes))):

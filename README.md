@@ -7,7 +7,7 @@ Loop preservation, automatic segmentation and explicit timing/wait policies
 support larger patterns. Run completion, comparison results and optional
 accessory results are separate: none alone certifies a device under test.
 
-![Viewer showing the four-vector public demo input, not a measured waveform](manual/images/viewer-simulated.png)
+![Viewer waveform panel showing the four-vector public demo input, not a measurement](manual/images/viewer-simulated.png)
 
 ## First run: a simulated tutorial
 

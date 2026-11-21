@@ -15,13 +15,14 @@ settle every licensing question; review the companion's own LICENSE and NOTICE.
   The SDK checkout is not bundled here. Its selected revision and components
   must be recorded for each firmware Release.
 - TinyUSB: MIT; local patches and a build lock are in firmware/dependencies.
-  Patching does not remove its original license or source obligations.
+  Retain the upstream copyright and permission notices when distributing it.
 - CMSIS components used by the SDK: Apache-2.0; reference notice in LICENSES.
 - Python, setuptools, wheel, pytest, CMake, Ninja and compilers are external
   development tools, not redistributed runtime code in this wheel.
 - Selenium and a browser are optional test tools, not bundled software.
 
-Reference texts in LICENSES are not a complete firmware dependency audit.
-The final firmware bill of materials, binary notices and source-build
-provenance remain release checks. Board and chip names identify the setup;
-no manufacturer endorsement or right to reuse logos/images is asserted.
+The reference texts in LICENSES do not enumerate everything linked into a
+firmware binary. Use the build record and the accompanying notices for that
+specific release, including SDK components and linked toolchain runtime code.
+Board and chip names identify the setup; no manufacturer endorsement or
+right to reuse logos/images is asserted.

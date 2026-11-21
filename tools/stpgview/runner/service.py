@@ -1541,7 +1541,8 @@ class RunnerService:
             "output_dir": str(output),
             "role_pins": role_pins(bundle),
             "limitations": [
-                "Execution preview: host fake-peer tested only; not physically accepted (contract M2).",
+                "Execution preview: these checks do not verify wiring or waveform timing. "
+                "See the firmware release notes for the hardware tests performed.",
                 "Cancel stops further host requests and closes the port; no STOP/release is sent and outputs "
                 "or acquisition may continue.",
                 "No automatic retry, reconnect or recovery; a failed run keeps its result directory.",

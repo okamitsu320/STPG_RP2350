@@ -90,7 +90,11 @@ def test_run_click_refuses_a_missing_port_before_the_bundle_verification(svc, se
         svc.prepare_run(request)
     assert verified == [] and not Path(svc.results_dir).exists()
     svc.port_provider = lambda: [port("COM7")]
-    assert svc.prepare_run(request)["summary"]["device"]["port"] == "COM7" and verified == [1]
+    summary = svc.prepare_run(request)["summary"]
+    assert summary["device"]["port"] == "COM7" and verified == [1]
+    limitations = " ".join(summary["limitations"])
+    assert "do not verify wiring or waveform timing" in limitations
+    assert "contract M2" not in limitations
 
 
 def test_start_refuses_a_port_that_went_away_after_the_confirmation(svc, segmented, monkeypatch):  # noqa: F811

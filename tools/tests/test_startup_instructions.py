@@ -50,5 +50,9 @@ def test_actual_demo_panels_are_linked_and_included_in_source_archives():
         raw = (ROOT / "manual/images" / name).read_bytes()
         assert raw.startswith(b"\x89PNG\r\n\x1a\n")
         width, height = struct.unpack(">II", raw[16:24])
-        assert width >= 600 and height >= 200
+        assert width >= 600
+        if name == "viewer-simulated.png":
+            assert 120 <= height <= 240  # show the waveform without a mostly empty workspace
+        else:
+            assert height >= 200
     assert "recursive-include manual *.md *.png" in (ROOT / "MANIFEST.in").read_text()
