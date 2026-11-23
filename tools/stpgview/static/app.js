@@ -1292,6 +1292,8 @@ function buildEditForm(kind) {
     el("button", { class: "btn small primary", type: "submit" }, kind === "remove" ? "Remove" : "Apply")));
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
+    const submit = form.querySelector("button[type=submit]");
+    if (submit.disabled) return;  // one edit at a time: a long pattern takes a while (the top bar shows it)
     const f = new FormData(form);
     let edit;
     if (kind === "wait") edit = { op: "insert_wait", after: Number(f.get("after")), duration: f.get("duration") };
@@ -1306,9 +1308,10 @@ function buildEditForm(kind) {
       edit = { op: "edge_time", signal: f.get("signal"), char: f.get("char"), event: Number(f.get("event")), time: f.get("time") };
       if (f.get("scope") === "table") { edit.at = a; } else { edit.first = a; edit.last = b; }
     }
+    submit.disabled = true;
     try {
       await editAction({ action: "add", edit }, edit.after ?? edit.first ?? (a >= 0 ? a : undefined));
-    } catch (err) { error.textContent = err.message; error.hidden = false; }
+    } catch (err) { error.textContent = err.message; error.hidden = false; } finally { submit.disabled = false; }
   });
   return form;
 }

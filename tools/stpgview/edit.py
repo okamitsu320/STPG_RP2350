@@ -326,6 +326,12 @@ class StilEditor:
             self._line_starts = [0] + [m.end() for m in re.finditer("\n", self.text)]
         return self._line_starts[line - 1] + max(0, column - 1)
 
+    def _line_at(self, offset: int) -> int:
+        """The 1-based source line of an offset (for messages; the line table is built once)."""
+
+        self._offset(1, 1)
+        return bisect_right(self._line_starts, offset)
+
     def _locate(self, vector: _Vector) -> None:
         if vector.start >= 0:
             return
@@ -827,21 +833,25 @@ class StilEditor:
     def _rewrite_statement(self, inserts: list, start: int, end: int, label: str, target: str, data: str,
                            mods: dict[str, str], added: dict, removed: list, plus_group: str | None) -> None:
         members = list(self.groups.get(target, (target,)))
-        line = self.text.count("\n", 0, start) + 1
+        # Every vector statement passes through here when a signal is added or removed, so the source line
+        # is looked up only for a message: counting newlines from the file start per vector made large flat
+        # patterns quadratic.
         try:
             chars = list(decode_vector_data(data.strip(), max_width=len(members)))
         except Exception as exc:  # noqa: BLE001 - the parser accepted it; report where it failed here
-            raise EditError(f"line {line}: cannot decode the vector data: {exc}") from exc
+            raise EditError(f"line {self._line_at(start)}: cannot decode the vector data: {exc}") from exc
         if len(chars) != len(members):
-            raise EditError(f"line {line}: {len(chars)} characters for {len(members)} signals of {target}")
+            raise EditError(f"line {self._line_at(start)}: {len(chars)} characters for {len(members)} signals "
+                            f"of {target}")
         for signal, char in mods.items():
             if signal in members:
                 chars[members.index(signal)] = char
             elif signal not in added:
-                raise EditError(f"line {line}: the vector assigns {target}, which does not contain {signal}")
+                raise EditError(f"line {self._line_at(start)}: the vector assigns {target}, "
+                                f"which does not contain {signal}")
         keep = [k for k, s in enumerate(members) if s not in removed]
         if not keep:
-            raise EditError(f"line {line}: the vector assigns only {', '.join(members)}; "
+            raise EditError(f"line {self._line_at(start)}: the vector assigns only {', '.join(members)}; "
                             "removing it would leave an empty vector")
         new_chars = "".join(chars[k] for k in keep)
         new_target = target

@@ -22,7 +22,7 @@ from stpgview.edit import EditError, PreviewMap, StilEditor
 from stpgview.load_bin import load_bin
 from stpgview.load_stil import load_stil
 from stpgview.model import KIND_COMPARE, KIND_DRIVE
-from stpgview.physical.patterns import counter
+from stpgview.physical.patterns import counter, counter_pins
 from stpgview.session import Session
 
 from test_stpgview import ATE_PATTERN, ATE_PROJECT, timelines
@@ -255,8 +255,39 @@ def test_an_added_input_drives_its_fill_and_a_wait_holds_it(tmp_path):
 def test_a_vector_that_assigns_only_the_removed_signal_is_refused(tmp_path):
     stil = tmp_path / "lone.stil"
     stil.write_text(SELECTORS.read_text().replace("  V { ALL = p0XH; }", "  V { ALL = p0XH; }\n  V { B = 1; }"))
-    with pytest.raises(EditError, match="assigns only B"):
+    line = stil.read_text().split("\n").index("  V { B = 1; }") + 1
+    with pytest.raises(EditError, match=rf"^line {line}: the vector assigns only B"):
         StilEditor(stil).apply([{"op": "remove_signal", "signal": "B"}], load_stil(stil))
+
+
+class _CountingText(str):
+    """The source text, counting the characters that ``count`` scans (line numbers are counted with it)."""
+
+    scanned = 0
+
+    def count(self, sub, start=None, end=None):  # type: ignore[no-untyped-def, override]
+        lo, hi, _ = slice(start, end).indices(len(self))
+        self.scanned += max(0, hi - lo)
+        return super().count(sub, start, end)
+
+
+def test_adding_a_signal_to_a_flat_pattern_does_not_rescan_the_file_per_vector(tmp_path):
+    """Each rewritten vector used to count the newlines from the file start for an error message's line number,
+    so adding a signal to a long flat pattern took time growing with the square of its vector count."""
+
+    stil, pins = tmp_path / "counter.stil", tmp_path / "counter.pins.json"
+    stil.write_text(counter(600))
+    pins.write_text(counter_pins())
+    edits = [{"op": "add_signal", "signal": "TP_DIAG", "direction": "In", "fill": "0"},
+             {"op": "set_char", "signal": "A0", "char": "1", "first": 5, "last": 9}]
+    source = load_stil(stil, pin_map=pins)
+    expected = StilEditor(stil, pin_map=pins).apply(edits, source)
+    editor = StilEditor(stil, pin_map=pins)
+    editor.text = _CountingText(editor.text)
+    result = editor.apply(edits, source)
+    assert (result.text, result.pin_map) == (expected.text, expected.pin_map)
+    assert result.text.count("; }") >= 600 and "TP_DIAG In;" in result.text
+    assert editor.text.scanned <= 2 * len(editor.text)  # once per vector would be about 300 times the file
 
 
 def test_names_follow_the_edit_list(tmp_path):

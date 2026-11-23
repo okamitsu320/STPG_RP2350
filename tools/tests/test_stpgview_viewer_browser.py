@@ -337,6 +337,29 @@ def test_add_and_rename_signals_from_the_page(viewer, tmp_path):
     assert page.errors() == []
 
 
+def test_a_second_apply_while_an_edit_runs_is_ignored(viewer, tmp_path):
+    """Adding a signal to a long pattern takes a while: Apply pressed again (or Enter) meanwhile sends nothing."""
+
+    page = viewer()
+    stil, pins = _counter(tmp_path, 50)
+    page.load(stil, pin_map=pins)
+    page.press("Add signal")
+    page.d.find_element(By.CSS_SELECTOR, "#editPanel input[name=signal]").send_keys("TP")
+    page.inject("window.__posts = 0; const plain = window.fetch;"
+                "window.fetch = (path, options) => { if (String(path).startsWith('/api/edits') && options"
+                " && options.method === 'POST') window.__posts++; return plain(path, options); };"
+                "const form = document.querySelector('#editPanel .edit-form');"
+                "form.requestSubmit(); window.__disabled = form.querySelector('button[type=submit]').disabled;"
+                "form.requestSubmit();")
+    page.until(lambda: page.js("return window.__S.meta && window.__S.meta.edit_of && window.__S.meta.signals.length") == 9,
+               what="preview with the new signal")
+    page.until(lambda: page.js("return window.__S.edit && window.__S.edit.preview_id === window.__S.activeId"),
+               what="edit state of the preview")
+    assert page.js("return window.__disabled") is True
+    assert page.js("return window.__posts") == 1 and len(page.js("return window.__S.edit.edits")) == 1
+    assert page.errors() == []
+
+
 def test_the_open_dialog_shows_the_roots_and_opens_one(viewer):
     page = viewer()
     page.d.find_element(By.ID, "openBtn").click()
