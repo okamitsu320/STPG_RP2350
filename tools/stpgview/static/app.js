@@ -27,6 +27,7 @@ const S = {
   selEnd: -1,                // other end of a shift-selected range
   edit: null,                // edit info of the active STIL (or its edited copy)
   editForm: null,
+  editPending: false,        // an edit request is on its way to the server (one at a time for the whole Viewer)
   hover: null,               // {x, y, t}
   wave: null,                // last /api/wave response, prepared
   waveKey: "",
@@ -1135,7 +1136,7 @@ function renderEditPanel() {
     button("Rename signal", "rename", false),
     button("Add signal", "add", false),
     button("Remove signal", "remove", false),
-    el("button", { class: "btn small", type: "button", onclick: exportStil,
+    el("button", { class: "btn small", type: "button", onclick: exportStil, "data-edit-request": true, disabled: S.editPending,
       title: "Write the STIL shown here (with its edits, if any) to a file of your choice" }, "Export STIL…")));
   if (a < 0) box.append(el("p", { class: "muted small-print" }, "Select a vector (Shift+click for a range) for the vector edits."));
   else box.append(el("p", { class: "muted small-print" }, a === b ? `Selected vector #${a}` : `Selected vectors #${a}–${b}`));
@@ -1145,13 +1146,16 @@ function renderEditPanel() {
     const list = el("ol", { class: "edit-list" });
     box.append(el("p", { class: "muted small-print" }, `Edits (#numbers and lines refer to ${S.edit.source_name || "the source STIL"}):`));
     edits.forEach((e, i) => list.append(el("li", {}, el("span", {}, (S.edit.descriptions || [])[i] || describeEdit(e)),
-      el("button", { class: "btn small", type: "button", title: "Remove this edit", onclick: () => editAction({ action: "remove", index: i }) }, "×"))));
+      el("button", { class: "btn small", type: "button", title: "Remove this edit", "data-edit-request": true, disabled: S.editPending,
+        onclick: () => editAction({ action: "remove", index: i }) }, "×"))));
     box.append(list);
     const preview = S.edit.preview_id;
     const footer = el("div", { class: "edit-actions" },
       preview && preview !== S.activeId ? el("button", { class: "btn small", type: "button", onclick: () => activate(preview) }, "Show edited") : null,
-      el("button", { class: "btn small primary", type: "button", onclick: () => editAction({ action: "save" }) }, "Save edited STIL"),
-      el("button", { class: "btn small", type: "button", onclick: () => { if (confirm("Remove all edits?")) editAction({ action: "clear" }); } }, "Clear"));
+      el("button", { class: "btn small primary", type: "button", "data-edit-request": true, disabled: S.editPending,
+        onclick: () => editAction({ action: "save" }) }, "Save edited STIL"),
+      el("button", { class: "btn small", type: "button", "data-edit-request": true, disabled: S.editPending,
+        onclick: () => { if (!editRequestRefused() && confirm("Remove all edits?")) editAction({ action: "clear" }); } }, "Clear"));
     box.append(footer);
     if (S.edit.saved) box.append(el("p", { class: "muted small-print saved" }, `Saved: ${S.edit.saved.stil}\nEdits: ${S.edit.saved.edits}`
       + (S.edit.saved.pin_map ? `\nPin map: ${S.edit.saved.pin_map}` : "")));
@@ -1160,7 +1164,7 @@ function renderEditPanel() {
 }
 
 async function exportStil() {
-  if (!S.meta || typeof pickPath !== "function") return;
+  if (!S.meta || typeof pickPath !== "function" || editRequestRefused()) return;
   const stil = (S.meta.sources || []).find((s) => s.kind === "stil");
   const origin = S.meta.preprocessed_from ? S.meta.preprocessed_from.pattern : stil.path;
   const name = origin.split(/[\\/]/).pop().replace(/\.(stil|stl)$/i, "");
@@ -1168,11 +1172,11 @@ async function exportStil() {
   const start = joinPath(origin.slice(0, origin.length - origin.split(/[\\/]/).pop().length).replace(/[\\/]$/, "") || ".",
     `${name}${edited ? ".edited" : S.meta.preprocessed_from ? ".pre" : ".copy"}.stil`);
   const path = await pickPath({ title: edited ? "Export the edited STIL" : "Export this STIL", label: "STIL file to write", start });
-  if (!path) return;
+  if (!path || editRequestRefused()) return;
   try {
-    const result = await busyWhile($("editPanel").querySelector("button[title^='Write the STIL']"),
+    const result = await whileEditPending(() => busyWhile($("editPanel").querySelector("button[title^='Write the STIL']"),
       api(`/api/edits?${q({ trace: S.activeId })}`, { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "export", path }) }));
+        body: JSON.stringify({ action: "export", path }) })));
     if (result.exported) setStatus(`exported ${result.exported.stil}` + (result.exported.pin_map ? ` (+ ${result.exported.pin_map.split(/[\\/]/).pop()})` : ""));
     else { S.edit = result; S.traces = result.traces || S.traces; renderTabs(); renderEditPanel(); setStatus(`exported ${result.saved.stil}`); }
   } catch (e) { setStatus(e.message, true); }
@@ -1289,11 +1293,11 @@ function buildEditForm(kind) {
   const error = el("p", { class: "error", hidden: true });
   form.append(error, el("div", { class: "edit-actions" },
     el("button", { class: "btn small", type: "button", onclick: () => { S.editForm = null; renderEditPanel(); } }, "Cancel"),
-    el("button", { class: "btn small primary", type: "submit" }, kind === "remove" ? "Remove" : "Apply")));
+    el("button", { class: "btn small primary", type: "submit", "data-edit-request": true, disabled: S.editPending },
+      kind === "remove" ? "Remove" : "Apply")));
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const submit = form.querySelector("button[type=submit]");
-    if (submit.disabled) return;  // one edit at a time: a long pattern takes a while (the top bar shows it)
+    if (editRequestRefused()) return;  // Apply is disabled meanwhile; Enter or a script can still submit
     const f = new FormData(form);
     let edit;
     if (kind === "wait") edit = { op: "insert_wait", after: Number(f.get("after")), duration: f.get("duration") };
@@ -1308,15 +1312,37 @@ function buildEditForm(kind) {
       edit = { op: "edge_time", signal: f.get("signal"), char: f.get("char"), event: Number(f.get("event")), time: f.get("time") };
       if (f.get("scope") === "table") { edit.at = a; } else { edit.first = a; edit.last = b; }
     }
-    submit.disabled = true;
     try {
       await editAction({ action: "add", edit }, edit.after ?? edit.first ?? (a >= 0 ? a : undefined));
-    } catch (err) { error.textContent = err.message; error.hidden = false; } finally { submit.disabled = false; }
+    } catch (err) { error.textContent = err.message; error.hidden = false; }
   });
   return form;
 }
 
+// One edit request at a time for the whole Viewer. A long pattern takes a while to edit, and meanwhile the panel and
+// its forms are drawn again (another vector selected, a form opened again), so the state is kept here, not in a form.
+function editRequestRefused() {
+  if (!S.editPending) return false;
+  setStatus("The previous edit is still being applied; nothing else was sent.");
+  return true;
+}
+
+function syncEditButtons() {
+  for (const button of $("editPanel").querySelectorAll("[data-edit-request]")) button.disabled = S.editPending;
+}
+
+async function whileEditPending(work) {
+  S.editPending = true;
+  syncEditButtons();
+  try { return await work(); } finally { S.editPending = false; syncEditButtons(); }
+}
+
 async function editAction(body, focusIndex) {
+  if (editRequestRefused()) return;
+  await whileEditPending(() => sendEdit(body, focusIndex));
+}
+
+async function sendEdit(body, focusIndex) {
   const fromId = S.activeId;
   let sourceIndex = focusIndex;
   if (S.meta && S.meta.edit_of && focusIndex !== undefined) {

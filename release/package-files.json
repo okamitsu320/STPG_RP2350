@@ -112,7 +112,7 @@
     "stpgview/runner/store.py": "a8710244832c8fca281df65646d005c6a3306d0c2c9a655406862706464ea5de",
     "stpgview/server.py": "bc8e6f0bc3dd23a21f2251cf3540b449c9c59e95e34432604e572cdb6021c8e5",
     "stpgview/session.py": "963d68add6cd4955aaab8e4a26c6fd746d748e151020d8715336337facd524ed",
-    "stpgview/static/app.js": "d48a25f4c667d175a4e8faa15d56424060c9f3a81373e20b8a07b741c27fb93f",
+    "stpgview/static/app.js": "c6c2be55820232639aa5467d85b72d7158cc8db4583ca27e881ac9295b93fd0f",
     "stpgview/static/index.html": "023f47a7bdf37893635e15739fe290e243f840bde293ec8c4263dcd63cfd8b0a",
     "stpgview/static/runner.js": "caf026e41ea53eaf99a0834e9711c10a19f915da462ab96d9d44054498c5c1d9",
     "stpgview/static/style.css": "db3acfc9395c43d184dd1a50a7aebee3860c369fad1379cdbaed19f8fa0b2a8a",

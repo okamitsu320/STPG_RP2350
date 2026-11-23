@@ -337,27 +337,99 @@ def test_add_and_rename_signals_from_the_page(viewer, tmp_path):
     assert page.errors() == []
 
 
-def test_a_second_apply_while_an_edit_runs_is_ignored(viewer, tmp_path):
-    """Adding a signal to a long pattern takes a while: Apply pressed again (or Enter) meanwhile sends nothing."""
+def test_one_edit_request_at_a_time_even_when_the_panel_is_drawn_again(viewer, tmp_path):
+    """Editing a long pattern takes a while. Until the server answers, a form drawn again for a newly selected vector
+    or a form opened again sends nothing, nor do the edit list's buttons; a failed edit leaves the form usable."""
 
     page = viewer()
     stil, pins = _counter(tmp_path, 50)
     page.load(stil, pin_map=pins)
-    page.press("Add signal")
-    page.d.find_element(By.CSS_SELECTOR, "#editPanel input[name=signal]").send_keys("TP")
-    page.inject("window.__posts = 0; const plain = window.fetch;"
-                "window.fetch = (path, options) => { if (String(path).startsWith('/api/edits') && options"
-                " && options.method === 'POST') window.__posts++; return plain(path, options); };"
-                "const form = document.querySelector('#editPanel .edit-form');"
-                "form.requestSubmit(); window.__disabled = form.querySelector('button[type=submit]').disabled;"
-                "form.requestSubmit();")
-    page.until(lambda: page.js("return window.__S.meta && window.__S.meta.edit_of && window.__S.meta.signals.length") == 9,
-               what="preview with the new signal")
-    page.until(lambda: page.js("return window.__S.edit && window.__S.edit.preview_id === window.__S.activeId"),
-               what="edit state of the preview")
-    assert page.js("return window.__disabled") is True
-    assert page.js("return window.__posts") == 1 and len(page.js("return window.__S.edit.edits")) == 1
-    assert page.errors() == []
+    manager = page.session.edits
+    plain_add, calls = manager.add, []
+    held = {1: threading.Event(), 3: threading.Event()}  # the server holds its answer to these requests
+
+    def add(trace_id, edit):
+        calls.append(edit.get("op"))
+        gate = held.get(len(calls))
+        if gate is not None:
+            gate.wait(30)
+        return plain_add(trace_id, edit)
+
+    manager.add = add
+    try:
+        page.inject("window.__posts = []; const plain = window.fetch;"
+                    "window.fetch = (path, options) => { if (String(path).startsWith('/api/edits?') && options"
+                    " && options.method === 'POST') window.__posts.push(JSON.parse(options.body).action);"
+                    " return plain(path, options); };")
+        apply_off = "return document.querySelector('#editPanel .edit-form button[type=submit]').disabled"
+        submit = "document.querySelector('#editPanel .edit-form').requestSubmit();"
+        panel = page.d.find_element(By.ID, "editPanel")
+
+        def form_open() -> bool:
+            return bool(page.js("return !!document.querySelector('#editPanel .edit-form')"))
+
+        def settled(index: int) -> bool:  # the vector is shown and the panel drawn for it
+            return bool(page.js("return !!(window.__S.selDetail && window.__S.selDetail.i === arguments[0])", index)) \
+                and f"Selected vector #{index}" in panel.text
+        # 1. a 1us wait after vector 3; the server holds the answer
+        page.inject("selectVector(3);")
+        page.until(lambda: settled(3), what="vector 3")
+        page.press("Insert wait")
+        page.until(form_open, what="the wait form")
+        page.d.find_element(By.CSS_SELECTOR, "#editPanel .edit-form button[type=submit]").click()
+        page.until(lambda: calls == ["insert_wait"], what="the first edit at the server")
+        assert page.js(apply_off) is True  # the same form: pressed again or Enter
+        page.inject(submit)
+        # 2. the same vector selected again draws the form again: its Apply is off, a submit sends nothing
+        page.js("document.querySelector('#editPanel .edit-form').dataset.before = '1'")
+        page.inject("selectVector(3);")
+        page.until(lambda: page.js("const f = document.querySelector('#editPanel .edit-form');"
+                                   " return !!f && !f.dataset.before"), what="the form drawn again")
+        assert page.js(apply_off) is True
+        page.inject(submit)
+        # 3. a form opened again (Add signal) while waiting: the same
+        page.until(lambda: settled(3), what="vector 3 again")
+        page.press("Add signal")
+        page.until(lambda: page.d.find_elements(By.CSS_SELECTOR, "#editPanel input[name=signal]"), what="the add form")
+        page.d.find_element(By.CSS_SELECTOR, "#editPanel input[name=signal]").send_keys("TP")
+        assert page.js(apply_off) is True
+        page.inject(submit)
+        time.sleep(0.5)
+        assert page.js("return window.__posts") == ["add"] and calls == ["insert_wait"]
+        assert "still being applied" in page.d.find_element(By.ID, "statusMsg").text
+        held[1].set()
+        page.until(lambda: page.js("return !!(window.__S.meta && window.__S.meta.edit_of && window.__S.edit"
+                                   " && window.__S.edit.edits.length === 1 && !window.__S.editPending)"),
+                   what="one edit applied")
+        assert page.js("return window.__S.edit.edits.map((e) => e.op)") == ["insert_wait"]
+        page.until(lambda: settled(3), what="vector 3 in the edited copy")
+        # 4. a failed edit: the form stays usable and the corrected edit goes through
+        page.press("Add signal")
+        page.until(lambda: page.d.find_elements(By.CSS_SELECTOR, "#editPanel input[name=signal]"), what="the add form")
+        page.d.find_element(By.CSS_SELECTOR, "#editPanel input[name=signal]").send_keys("9bad")
+        page.d.find_element(By.CSS_SELECTOR, "#editPanel .edit-form button[type=submit]").click()
+        page.until(lambda: "not a STIL name" in page.d.find_element(By.CSS_SELECTOR, "#editPanel .edit-form .error").text,
+                   what="the error")
+        assert page.js(apply_off) is False
+        name = page.d.find_element(By.CSS_SELECTOR, "#editPanel input[name=signal]")
+        name.clear()
+        name.send_keys("TP")
+        page.d.find_element(By.CSS_SELECTOR, "#editPanel .edit-form button[type=submit]").click()
+        page.until(lambda: len(calls) == 3, what="the corrected edit at the server")
+        # while it is held, the edit list's buttons and Export are off as well
+        buttons = "return [...document.querySelectorAll('#editPanel [data-edit-request]')].map((b) => [b.textContent, b.disabled])"
+        page.until(lambda: all(off for _label, off in page.js(buttons)), what="every edit-request button off")
+        assert {label for label, _off in page.js(buttons)} >= {"×", "Save edited STIL", "Clear", "Export STIL…", "Apply"}
+        held[3].set()
+        page.until(lambda: page.js("return !!(window.__S.edit && window.__S.edit.edits.length === 2 && !window.__S.editPending)"),
+                   what="the second edit applied")
+        assert page.js("return window.__S.edit.edits.map((e) => e.op)") == ["insert_wait", "add_signal"]
+        assert page.js("return window.__posts") == ["add", "add", "add"] and calls == ["insert_wait", "add_signal", "add_signal"]
+        assert not any(off for _label, off in page.js(buttons))
+        assert page.errors() == []
+    finally:
+        for gate in held.values():
+            gate.set()
 
 
 def test_the_open_dialog_shows_the_roots_and_opens_one(viewer):
